@@ -13,7 +13,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import net.lc4ever.framework.database.meta.DatabaseMetadata;
-import oracle.jdbc.driver.OracleDriver;
+//import oracle.jdbc.driver.OracleDriver;
 
 
 /**
@@ -24,7 +24,7 @@ public class DatabaseMetaFetcher {
 	private Connection connection;
 
 	public static void main(String[] args) throws Exception {
-		System.out.println(OracleDriver.BUILD_DATE);
+		//System.out.println(OracleDriver.BUILD_DATE);
 
 		DatabaseMetaFetcher fetcher = new DatabaseMetaFetcher();
 
