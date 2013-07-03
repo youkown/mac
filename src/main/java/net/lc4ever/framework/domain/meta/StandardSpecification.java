@@ -22,7 +22,6 @@ public class StandardSpecification implements BaseEntity<Integer> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	/**
 	 * @see net.lc4ever.framework.domain.BaseEntity#setId(java.io.Serializable)
 	 */
