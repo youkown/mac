@@ -24,7 +24,6 @@ public class ContextLoaderListener extends org.springframework.web.context.Conte
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		super.contextInitialized(event);
-		logger.info("");
 		ContextHolder.getInstance().setServletContext(event.getServletContext());
 		ContextHolder.getInstance().setApplicationContext(getCurrentWebApplicationContext());
 	}
