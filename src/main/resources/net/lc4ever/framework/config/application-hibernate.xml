@@ -75,7 +75,7 @@
 	</bean>
 	
 	<bean id="genericCrudService" class="net.lc4ever.framework.service.impl.GenericCrudServiceImpl">
-		<property name="genericDAO" ref="hibernateDAO"/>
+		<property name="genericDao" ref="hibernateDAO"/>
 	</bean>
 	
 	
