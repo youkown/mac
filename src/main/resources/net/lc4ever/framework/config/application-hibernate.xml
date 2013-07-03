@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<!-- Hibernate Listener -->
+	<!-- <bean id="crudListener" class="com.nxy.nms.mb.listener.CrudListener" /> -->
+	<!-- <bean id="loadListener" class="com.nxy.nms.mb.listener.LoadListener" /> -->
+
+	<!-- Hibernate Interceptor -->
+	<!-- <bean id="crudInterceptor" class="com.nxy.nms.mb.interceptor.CrudInterceptor"> -->
+	<!-- <property name="crudService" ref="genericCrudService" /> -->
+	<!-- </bean> -->
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.jdbc.batch_size">20</prop>
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.OSCacheProvider</prop>
+				<prop key="hibernate.generate_statistics">true</prop>
+				<prop key="hibernate.cache.use_structured_entries">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+			</props>
+		</property>
+		<property name="annotatedClasses">
+			<ref bean="hibernateMappingClasses"/>
+		</property>
+		<property name="packagesToScan">
+			<ref bean="hibernateMappingPackages"/>
+		</property>
+		<!-- <property name="eventListeners"> -->
+		<!-- <map> -->
+		<!-- <entry key="load"> -->
+		<!-- <ref bean="loadListener" /> -->
+		<!-- </entry> -->
+		<!-- <entry key="post-insert"> -->
+		<!-- <ref bean="crudListener" /> -->
+		<!-- </entry> -->
+		<!-- <entry key="post-update"> -->
+		<!-- <ref bean="crudListener" /> -->
+		<!-- </entry> -->
+		<!-- <entry key="post-delete"> -->
+		<!-- <ref bean="crudListener" /> -->
+		<!-- </entry> -->
+		<!-- </map> -->
+		<!-- </property> -->
+		<!-- <property name="entityInterceptor"> -->
+        <!-- <ref bean="crudInterceptor"/> -->
+        <!-- </property> -->
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
+	<bean id="hibernateDAO" class="net.lc4ever.framework.dao.GenericDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="genericCrudService" class="net.lc4ever.framework.service.impl.GenericCrudServiceImpl">
+		<property name="genericDAO" ref="hibernateDAO"/>
+	</bean>
+	
+	
+</beans>
