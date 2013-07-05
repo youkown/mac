@@ -50,6 +50,7 @@ public class DebugFilter implements Filter {
 			HttpServletRequest req = (HttpServletRequest)request;
 			logger.debug("RequestURL:{}\t{}",req.getDispatcherType(),req.getRequestURL());
 		}
+		chain.doFilter(request, response);
 	}
 
 	/**
