@@ -5,6 +5,7 @@
 package net.lc4ever.framework.format;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -36,6 +37,14 @@ public class DateFormatter {
 			FORMAT_REGISTER.put(pattern, formatter);
 		}
 		return formatter.format(date);
+	}
+	public static Date parse(final String pattern, final String value) throws ParseException {
+		DateFormat formatter = FORMAT_REGISTER.get(pattern);
+		if (formatter==null) {
+			formatter = new SimpleDateFormat(pattern);
+			FORMAT_REGISTER.put(pattern, formatter);
+		}
+		return formatter.parse(value);
 	}
 
 	public static String format(final String format) {
