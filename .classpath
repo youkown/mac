@@ -14,7 +14,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/jar/spring/spring-beans-3.2.3.RELEASE.jar">
+	<classpathentry exported="true" kind="lib" path="lib/jar/spring/spring-beans-3.2.3.RELEASE.jar" sourcepath="/var/data/javalib/org/springframework/core/3.2.3/spring-framework-3.2.3.RELEASE/libs/src/spring-beans-3.2.3.RELEASE-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
@@ -24,17 +24,17 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/jar/spring/spring-context-3.2.3.RELEASE.jar">
+	<classpathentry exported="true" kind="lib" path="lib/jar/spring/spring-context-3.2.3.RELEASE.jar" sourcepath="/home/q-wang/.m2/repository/org/springframework/spring-context/3.2.3.RELEASE/spring-context-3.2.3.RELEASE-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/jar/spring/spring-context-support-3.2.3.RELEASE.jar">
+	<classpathentry exported="true" kind="lib" path="lib/jar/spring/spring-context-support-3.2.3.RELEASE.jar" sourcepath="/home/q-wang/.m2/repository/org/springframework/spring-context-support/3.2.3.RELEASE/spring-context-support-3.2.3.RELEASE-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/jar/spring/spring-core-3.2.3.RELEASE.jar">
+	<classpathentry exported="true" kind="lib" path="lib/jar/spring/spring-core-3.2.3.RELEASE.jar" sourcepath="/var/data/javalib/org/springframework/core/3.2.3/spring-framework-3.2.3.RELEASE/libs/src/spring-core-3.2.3.RELEASE-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
@@ -64,7 +64,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/jar/spring/spring-orm-3.2.3.RELEASE.jar">
+	<classpathentry exported="true" kind="lib" path="lib/jar/spring/spring-orm-3.2.3.RELEASE.jar" sourcepath="/home/q-wang/.m2/repository/org/springframework/spring-orm/3.2.3.RELEASE/spring-orm-3.2.3.RELEASE-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
@@ -85,7 +85,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/jar/spring/spring-web-3.2.3.RELEASE.jar">
+	<classpathentry exported="true" kind="lib" path="lib/jar/spring/spring-web-3.2.3.RELEASE.jar" sourcepath="/var/data/javalib/org/springframework/core/3.2.3/spring-framework-3.2.3.RELEASE/libs/src/spring-web-3.2.3.RELEASE-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
@@ -120,8 +120,6 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/jar/commons/commons-digester3-3.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jar/commons/commons-digester3-3.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jar/commons/commons-digester3-3.2.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
@@ -133,11 +131,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/jar/commons/commons-io-2.0.1.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/jar/commons/commons-lang-2.5.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
@@ -201,7 +194,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/jar/hibernate/hibernate-core-4.2.2.Final.jar">
+	<classpathentry exported="true" kind="lib" path="lib/jar/hibernate/hibernate-core-4.2.2.Final.jar" sourcepath="/var/data/javalib/org/hibernate/core/4.2.2.Final/hibernate-release-4.2.2.Final/project/hibernate-core/src/main/java">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
@@ -312,12 +305,18 @@
 			<attribute name="owner.project.facets" value="jst.utility"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-6-openjdk-amd64">
+	<classpathentry exported="true" kind="lib" path="lib/jar/spring/aopalliance.jar">
 		<attributes>
-			<attribute name="owner.project.facets" value="java"/>
+			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="lib/jar/spring/aopalliance.jar">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/jar/commons/commons-lang-2.6.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/jar/commons/commons-lang3-3.1.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
