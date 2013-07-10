@@ -9,7 +9,6 @@ import net.lc4ever.framework.domain.BaseEntity;
 
 /**
  * @author <a href="mailto:apeidou@gmail.com">Q-Wang</a>
- *
  */
 public class SchemaMeta implements BaseEntity<Long> {
 
@@ -26,7 +25,7 @@ public class SchemaMeta implements BaseEntity<Long> {
 	 * @see net.lc4ever.framework.domain.BaseEntity#setId(java.io.Serializable)
 	 */
 	@Override
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		// TODO Auto-generated method stub
 
 	}

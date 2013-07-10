@@ -4,13 +4,21 @@
  */
 package net.lc4ever.framework.domain.meta;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import net.lc4ever.framework.domain.BaseEntity;
 
 
 /**
  * @author <a href="mailto:apeidou@gmail.com">Q-Wang</a>
- *
  */
+@Entity
+@Table(name="T5_META_DATABASE")
 public class DatabaseMeta implements BaseEntity<Long> {
 
 	private Long id;
@@ -19,6 +27,9 @@ public class DatabaseMeta implements BaseEntity<Long> {
 	 * @see net.lc4ever.framework.domain.BaseEntity#getId()
 	 */
 	@Override
+	@Id
+	@Column(name="ID")
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Long getId() {
 		return id;
 	}
@@ -27,7 +38,7 @@ public class DatabaseMeta implements BaseEntity<Long> {
 	 * @see net.lc4ever.framework.domain.BaseEntity#setId(java.io.Serializable)
 	 */
 	@Override
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 

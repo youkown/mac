@@ -34,7 +34,7 @@ public class ResultSetMeta implements BaseEntity<Long> {
 	}
 
 	@Override
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
