@@ -473,7 +473,7 @@ public class GenericDAOHibernateStatics extends GenericDaoHibernate {
 		long start = System.currentTimeMillis();
 		List<E> result = super.queryByProperty(clazz, firstResult, maxResults, property, arg, orders);
 		statistics.hqlClassCost(clazz.getClass().getName(), System.currentTimeMillis()-start);
-		return super.queryByProperty(clazz, firstResult, maxResults, property, arg, orders);
+		return result;
 	}
 
 }
