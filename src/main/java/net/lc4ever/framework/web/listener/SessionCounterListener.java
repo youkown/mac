@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author <a href="mailto:apeidou@gmail.com">Q-Wang</a>
  */
+@WebListener
 public class SessionCounterListener implements HttpSessionListener, HttpSessionAttributeListener, ServletContextListener {
 
 	public static final String KEY_COUNTER = "__com.nxy.nms.mb.listener.SessionCounterListener.Counter";
@@ -37,7 +39,7 @@ public class SessionCounterListener implements HttpSessionListener, HttpSessionA
 	 * @see javax.servlet.http.HttpSessionListener#sessionCreated(javax.servlet.http.HttpSessionEvent)
 	 */
 	@Override
-	public void sessionCreated(HttpSessionEvent event) {
+	public void sessionCreated(final HttpSessionEvent event) {
 		synchronized (counter) {
 			counter.alive++;
 		}
@@ -47,12 +49,12 @@ public class SessionCounterListener implements HttpSessionListener, HttpSessionA
 	 * @see javax.servlet.http.HttpSessionListener#sessionDestroyed(javax.servlet.http.HttpSessionEvent)
 	 */
 	@Override
-	public void sessionDestroyed(HttpSessionEvent event) {
+	public void sessionDestroyed(final HttpSessionEvent event) {
 		synchronized (counter) {
 			counter.alive--;
-//			if (event.getSession().getAttribute(SecurityContext.SESSION_KEY) != null) {
-//				counter.online--;
-//			}
+			//			if (event.getSession().getAttribute(SecurityContext.SESSION_KEY) != null) {
+			//				counter.online--;
+			//			}
 		}
 	}
 
@@ -60,26 +62,26 @@ public class SessionCounterListener implements HttpSessionListener, HttpSessionA
 	 * @see javax.servlet.http.HttpSessionAttributeListener#attributeAdded(javax.servlet.http.HttpSessionBindingEvent)
 	 */
 	@Override
-	public void attributeAdded(HttpSessionBindingEvent event) {
-//		if (SecurityContext.SESSION_KEY.equals(event.getName())) {
-//			synchronized (counter) {
-//				counter.online++;
-//			}
-//		}
+	public void attributeAdded(final HttpSessionBindingEvent event) {
+		//		if (SecurityContext.SESSION_KEY.equals(event.getName())) {
+		//			synchronized (counter) {
+		//				counter.online++;
+		//			}
+		//		}
 	}
 
 	/**
 	 * @see javax.servlet.http.HttpSessionAttributeListener#attributeRemoved(javax.servlet.http.HttpSessionBindingEvent)
 	 */
 	@Override
-	public void attributeRemoved(HttpSessionBindingEvent event) {
+	public void attributeRemoved(final HttpSessionBindingEvent event) {
 	}
 
 	/**
 	 * @see javax.servlet.http.HttpSessionAttributeListener#attributeReplaced(javax.servlet.http.HttpSessionBindingEvent)
 	 */
 	@Override
-	public void attributeReplaced(HttpSessionBindingEvent event) {
+	public void attributeReplaced(final HttpSessionBindingEvent event) {
 
 	}
 
@@ -87,7 +89,7 @@ public class SessionCounterListener implements HttpSessionListener, HttpSessionA
 	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
 	 */
 	@Override
-	public void contextDestroyed(ServletContextEvent event) {
+	public void contextDestroyed(final ServletContextEvent event) {
 
 	}
 
@@ -95,7 +97,7 @@ public class SessionCounterListener implements HttpSessionListener, HttpSessionA
 	 * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
 	 */
 	@Override
-	public void contextInitialized(ServletContextEvent event) {
+	public void contextInitialized(final ServletContextEvent event) {
 		servletContext = event.getServletContext();
 		servletContext.setAttribute(KEY_COUNTER, counter);
 	}
