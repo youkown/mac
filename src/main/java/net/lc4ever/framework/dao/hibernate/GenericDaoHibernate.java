@@ -2,13 +2,14 @@
  * Framework: net.lc4ever.framework.dao.GenericDaoHibernate.java create by q-wang on May 2, 2013 11:02:14 PM
  * VCS Tag: $Id$
  */
-package net.lc4ever.framework.dao;
+package net.lc4ever.framework.dao.hibernate;
 
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
+import net.lc4ever.framework.dao.GenericDao;
 import net.lc4ever.framework.domain.BaseEntity;
 
 import org.hibernate.Criteria;
