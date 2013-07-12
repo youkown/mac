@@ -70,7 +70,7 @@
 	
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 
-	<bean id="hibernateDAO" class="net.lc4ever.framework.dao.GenericDaoHibernate">
+	<bean id="hibernateDAO" class="net.lc4ever.framework.dao.hibernate.GenericDaoHibernate">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	
