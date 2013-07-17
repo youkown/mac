@@ -13,19 +13,19 @@ import net.lc4ever.framework.dao.GenericDao;
 import net.lc4ever.framework.domain.BaseEntity;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 
 /**
@@ -33,35 +33,50 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * @revision $Revision:$
  * @author <a href="mailto:apeidou@gmail.com">Q-Wang</a>
  */
-public class GenericDaoHibernate extends HibernateDaoSupport implements GenericDao {
+public class GenericDaoHibernate implements GenericDao {
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+	protected SessionFactory sessionFactory;
+
+	/**
+	 * @param sessionFactory the sessionFactory to set
+	 */
+	public void setSessionFactory(final SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	protected Session getSession() {
+		return sessionFactory.getCurrentSession();
+	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#list(java.lang.Class)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public <E extends BaseEntity<ID>, ID extends Serializable> List<E> list(Class<E> clazz) {
+	public <E extends BaseEntity<ID>, ID extends Serializable> List<E> list(final Class<E> clazz) {
 		logger.trace("Listing All Entries for Class:{}.", clazz.getName());
-		return getHibernateTemplate().loadAll(clazz);
+		return getSession().createCriteria(clazz).list();
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#get(java.lang.Class, java.io.Serializable)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public <E extends BaseEntity<ID>, ID extends Serializable> E get(Class<E> clazz, ID id) {
+	public <E extends BaseEntity<ID>, ID extends Serializable> E get(final Class<E> clazz, final ID id) {
 		logger.trace("Getting Entry for Class:{}, using Id:{}.", clazz.getName(), id);
-		return getHibernateTemplate().get(clazz, id);
+		return (E) getSession().get(clazz, id);
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#delete(sinonet.framework.bean.BaseEntity)
 	 */
 	@Override
-	public <E extends BaseEntity<ID>, ID extends Serializable> void delete(E entity) {
+	public <E extends BaseEntity<ID>, ID extends Serializable> void delete(final E entity) {
 		logger.trace("Deleting Entry for Class:{}, using Id:{}.", entity.getClass().getName(), entity.getId());
-		getHibernateTemplate().delete(entity);
+		getSession().delete(entity);
 	}
 
 	/**
@@ -69,34 +84,34 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <E extends BaseEntity<ID>, ID extends Serializable> ID save(E entity) {
+	public <E extends BaseEntity<ID>, ID extends Serializable> ID save(final E entity) {
 		logger.trace("Saving Entry for Class:{}, Id:{}.", entity.getClass().getName(), entity.getId());
-		return (ID) getHibernateTemplate().save(entity);
+		return (ID) getSession().save(entity);
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#update(sinonet.framework.bean.BaseEntity)
 	 */
 	@Override
-	public <E extends BaseEntity<ID>, ID extends Serializable> void update(E entity) {
+	public <E extends BaseEntity<ID>, ID extends Serializable> void update(final E entity) {
 		logger.trace("Updating Entry for Class:{}, Id:{}.", entity.getClass().getName(), entity.getId());
-		getHibernateTemplate().update(entity);
+		getSession().update(entity);
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#saveOrUpdate(sinonet.framework.bean.BaseEntity)
 	 */
 	@Override
-	public <E extends BaseEntity<ID>, ID extends Serializable> void saveOrUpdate(E entity) {
+	public <E extends BaseEntity<ID>, ID extends Serializable> void saveOrUpdate(final E entity) {
 		logger.trace("Saving Or Updating for Class:{}, Id:{}.", entity.getClass().getName(), entity.getId());
-		getHibernateTemplate().saveOrUpdate(entity);
+		getSession().saveOrUpdate(entity);
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#count(java.lang.Class)
 	 */
 	@Override
-	public <E extends BaseEntity<ID>, ID extends Serializable> long count(Class<E> clazz) {
+	public <E extends BaseEntity<ID>, ID extends Serializable> long count(final Class<E> clazz) {
 		logger.trace("Counting Entries for Class:{}.", clazz.getName());
 		return ((Number) getSession().createCriteria(clazz).setProjection(Projections.rowCount()).uniqueResult()).longValue();
 	}
@@ -130,7 +145,7 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 			pager.setCount(count);
 			return pager;
 		} else if (CriteriaQueryBuilder.class.isAssignableFrom(queryBuilder.getClass())) {
-			return getHibernateTemplate().execute(new HibernateCallback<Pager<T>>() {
+			return getSession().execute(new HibernateCallback<Pager<T>>() {
 				@Override
 				public Pager<T> doInHibernate(Session session) throws HibernateException, SQLException {
 					Criteria criteria = ((CriteriaQueryBuilder) queryBuilder).buildCriteria(session);
@@ -150,7 +165,7 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 			});
 		} else if (SqlQueryBuilder.class.isAssignableFrom(queryBuilder.getClass())) {
 			final SqlQuery query = ((SqlQueryBuilder) queryBuilder).buildSqlQuery();
-			return getHibernateTemplate().execute(new HibernateCallback<Pager<T>>() {
+			return getSession().execute(new HibernateCallback<Pager<T>>() {
 				@Override
 				public Pager<T> doInHibernate(Session session) throws HibernateException, SQLException {
 					SQLQuery sql = session.createSQLQuery(query.getSql());
@@ -183,7 +198,11 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	@Override
 	public List<?> hql(final String hql, final Object... args) {
 		logger.trace("HQL query, hql:[{}], args count:{}.", hql, args==null?0:args.length);
-		return getHibernateTemplate().find(hql, args);
+		Query query = getSession().createQuery(hql);
+		for (int i=0;args!=null&&i<args.length;i++) {
+			query.setParameter(i, args[i]);
+		}
+		return query.list();
 	}
 
 	/**
@@ -192,15 +211,10 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	@Override
 	public List<?> hql(final long firstResult, final long maxResults, final String hql, final Object... args) {
 		logger.trace("HQL query, hql:[{}], args count:{}.", hql, args==null?0:args.length);
-		return getHibernateTemplate().execute(new HibernateCallback<List<?>>() {
-			@Override
-			public List<?> doInHibernate(Session session) throws HibernateException, SQLException {
-				Query query = session.createQuery(hql);
-				query.setFirstResult((int) firstResult);
-				query.setMaxResults((int)maxResults);
-				return query.list();
-			}
-		});
+		Query query = getSession().createQuery(hql);
+		query.setFirstResult((int) firstResult);
+		query.setMaxResults((int)maxResults);
+		return query.list();
 	}
 
 	/**
@@ -208,7 +222,7 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> hql(Class<T> expectType, String hql, Object... args) {
+	public <T> List<T> hql(final Class<T> expectType, final String hql, final Object... args) {
 		return (List<T>) hql(hql, args);
 	}
 
@@ -217,7 +231,7 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> hql(Class<T> expectType, long firstResult, long maxResults, String hql, Object... args) {
+	public <T> List<T> hql(final Class<T> expectType, final long firstResult, final long maxResults, final String hql, final Object... args) {
 		return (List<T>) hql(firstResult,maxResults,hql,args);
 	}
 
@@ -228,16 +242,11 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	@Override
 	public List<?> sql(final String sql, final Object... args) {
 		logger.trace("SQL query, sql:[{}], args count:{}.", sql, args==null?0:args.length);
-		return getHibernateTemplate().execute(new HibernateCallback<List<?>>() {
-			@Override
-			public List<?> doInHibernate(Session session) throws HibernateException, SQLException {
-				SQLQuery query = session.createSQLQuery(sql);
-				for (int i = 0; args!=null&&i < args.length; i++) {
-					query.setParameter(i, args[i]);
-				}
-				return query.list();
-			}
-		});
+		SQLQuery query = getSession().createSQLQuery(sql);
+		for (int i = 0; args!=null&&i < args.length; i++) {
+			query.setParameter(i, args[i]);
+		}
+		return query.list();
 	}
 
 	/**
@@ -246,18 +255,13 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	@Override
 	public List<?> sql(final long firstResult, final long maxResults, final String sql, final Object... args) {
 		logger.trace("SQL query with page, sql:[{}], args count:{}, firstResult:{}, maxResults:{}", sql, args==null?0:args.length, firstResult, maxResults);
-		return getHibernateTemplate().execute(new HibernateCallback<List<?>>() {
-			@Override
-			public List<?> doInHibernate(Session session) throws HibernateException, SQLException {
-				SQLQuery query = session.createSQLQuery(sql);
-				for (int i = 0; args!=null&&i < args.length; i++) {
-					query.setParameter(i, args[i]);
-				}
-				query.setFirstResult((int)firstResult);
-				query.setMaxResults((int)maxResults);
-				return query.list();
-			}
-		});
+		SQLQuery query = getSession().createSQLQuery(sql);
+		for (int i = 0; args!=null&&i < args.length; i++) {
+			query.setParameter(i, args[i]);
+		}
+		query.setFirstResult((int)firstResult);
+		query.setMaxResults((int)maxResults);
+		return query.list();
 	}
 
 	/**
@@ -265,7 +269,7 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> sql(Class<T> expectType, final String sql, final Object... args) {
+	public <T> List<T> sql(final Class<T> expectType, final String sql, final Object... args) {
 		return (List<T>) sql(sql, args);
 	}
 
@@ -274,7 +278,7 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> sql(Class<T> expectType, long firstResult, long maxResults, String sql, Object... args) {
+	public <T> List<T> sql(final Class<T> expectType, final long firstResult, final long maxResults, final String sql, final Object... args) {
 		return (List<T>) sql(firstResult,maxResults,sql,args);
 	}
 
@@ -282,17 +286,13 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	 * @see sinonet.framework.dao.GenericDAO#uniqueResultHql(java.lang.String, java.lang.Object[])
 	 */
 	@Override
-	public Object uniqueResultHql(String hql, Object... args) {
+	public Object uniqueResultHql(final String hql, final Object... args) {
 		logger.trace("HQL unique query, hql:[{}], args count:{}.", hql, args==null?0:args.length);
-		List<?> results = getHibernateTemplate().find(hql, args);
-		// CHECK: Use org.hibernate.NonUniqueResultException insead?
-		if (results.isEmpty()) {
-			return null;
-		} else if (results.size() == 1) {
-			return results.get(0);
-		} else {
-			throw new IncorrectResultSizeDataAccessException(1, results.size());
+		Query query = getSession().createQuery(hql);
+		for (int i=0;args!=null&&i<args.length;i++) {
+			query.setParameter(i, args[i]);
 		}
+		return query.uniqueResult();
 	}
 
 	/**
@@ -300,13 +300,14 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T uniqueResultHql(Class<T> expectType, String hql, Object... args) {
+	public <T> T uniqueResultHql(final Class<T> expectType, final String hql, final Object... args) {
 		return (T) uniqueResultHql(hql, args);
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#uniqueResultByProperties(java.lang.Class, java.lang.String[], java.lang.Object[])
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public <E extends BaseEntity<ID>, ID extends Serializable> E uniqueResultByProperties(final Class<E> clazz, final String[] properties, final Object[] args) {
 		if (properties==null||args==null) {
@@ -316,22 +317,16 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 			throw new IllegalArgumentException("argument properties.length must equals args.length.");
 		}
 		logger.trace("UniqueResultByProperties: properties:{}", new Object[]{properties});
-		return getHibernateTemplate().execute(new HibernateCallback<E>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public E doInHibernate(Session session) throws HibernateException, SQLException {
-				Criteria criteria = session.createCriteria(clazz);
-				for (int i=0;i<properties.length;i++) {
-					String property = properties[i];
-					if (property==null) {
-						throw new NullPointerException("properties["+i+"] must not be null.");
-					}
-					Object arg = args[i];
-					criteria.add(arg==null?Restrictions.isNull(property):Restrictions.eq(property, arg));
-				}
-				return (E) criteria.uniqueResult();
+		Criteria criteria = getSession().createCriteria(clazz);
+		for (int i=0;i<properties.length;i++) {
+			String property = properties[i];
+			if (property==null) {
+				throw new NullPointerException("properties["+i+"] must not be null.");
 			}
-		});
+			Object arg = args[i];
+			criteria.add(arg==null?Restrictions.isNull(property):Restrictions.eq(property, arg));
+		}
+		return (E) criteria.uniqueResult();
 	}
 
 	/**
@@ -345,6 +340,7 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#queryByProperties(java.lang.Class, java.lang.String[], java.lang.Object[], org.hibernate.criterion.Order[])
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public <E extends BaseEntity<ID>, ID extends Serializable> List<E> queryByProperties(final Class<E> clazz, final String[] properties, final Object[] args, final Order... orders) {
 		if (properties==null||args==null) {
@@ -353,27 +349,21 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 		if (properties.length!=args.length) {
 			throw new IllegalArgumentException("argument properties.length must equals args.length.");
 		}
-		return getHibernateTemplate().execute(new HibernateCallback<List<E>>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public List<E> doInHibernate(Session session) throws HibernateException, SQLException {
-				Criteria criteria = session.createCriteria(clazz);
-				for (int i=0;i<properties.length;i++) {
-					String property = properties[i];
-					if (property==null) {
-						throw new NullPointerException("property name must not be null, properties position:"+i);
-					}
-					Object arg = args[i];
-					criteria.add(arg==null?Restrictions.isNull(property):Restrictions.eq(property, arg));
-					if (orders!=null) {
-						for (Order order:orders) {
-							criteria.addOrder(order);
-						}
-					}
-				}
-				return criteria.list();
+		Criteria criteria = getSession().createCriteria(clazz);
+		for (int i=0;i<properties.length;i++) {
+			String property = properties[i];
+			if (property==null) {
+				throw new NullPointerException("property name must not be null, properties position:"+i);
 			}
-		});
+			Object arg = args[i];
+			criteria.add(arg==null?Restrictions.isNull(property):Restrictions.eq(property, arg));
+			if (orders!=null) {
+				for (Order order:orders) {
+					criteria.addOrder(order);
+				}
+			}
+		}
+		return criteria.list();
 	}
 
 	/**
@@ -387,6 +377,7 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#queryByProperties(java.lang.Class, long, long, java.lang.String[], java.lang.Object[], org.hibernate.criterion.Order[])
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public <E extends BaseEntity<ID>, ID extends Serializable> List<E> queryByProperties(final Class<E> clazz, final long firstResult, final long maxResults, final String[] properties, final Object[] args, final Order... orders) {
 		if (properties==null||args==null) {
@@ -395,36 +386,30 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 		if (properties.length!=args.length) {
 			throw new IllegalArgumentException("argument properties.length must equals args.length.");
 		}
-		return getHibernateTemplate().execute(new HibernateCallback<List<E>>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public List<E> doInHibernate(Session session) throws HibernateException, SQLException {
-				Criteria criteria = session.createCriteria(clazz);
-				for (int i=0;i<properties.length;i++) {
-					String property = properties[i];
-					if (property==null) {
-						throw new NullPointerException("property name must not be null, properties position:"+i);
-					}
-					Object arg = args[i];
-					criteria.add(arg==null?Restrictions.isNull(property):Restrictions.eq(property, arg));
-					if (orders!=null) {
-						for (Order order:orders) {
-							criteria.addOrder(order);
-						}
-					}
-					criteria.setMaxResults((int)maxResults);
-					criteria.setFirstResult((int)firstResult);
-				}
-				return criteria.list();
+		Criteria criteria = getSession().createCriteria(clazz);
+		for (int i=0;i<properties.length;i++) {
+			String property = properties[i];
+			if (property==null) {
+				throw new NullPointerException("property name must not be null, properties position:"+i);
 			}
-		});
+			Object arg = args[i];
+			criteria.add(arg==null?Restrictions.isNull(property):Restrictions.eq(property, arg));
+			if (orders!=null) {
+				for (Order order:orders) {
+					criteria.addOrder(order);
+				}
+			}
+			criteria.setMaxResults((int)maxResults);
+			criteria.setFirstResult((int)firstResult);
+		}
+		return criteria.list();
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#queryByProperty(java.lang.Class, long, long, java.lang.String, java.lang.Object, org.hibernate.criterion.Order[])
 	 */
 	@Override
-	public <E extends BaseEntity<ID>, ID extends Serializable> List<E> queryByProperty(Class<E> clazz, long firstResult, long maxResults, String property, Object arg, Order... orders) {
+	public <E extends BaseEntity<ID>, ID extends Serializable> List<E> queryByProperty(final Class<E> clazz, final long firstResult, final long maxResults, final String property, final Object arg, final Order... orders) {
 		return queryByProperties(clazz, firstResult, maxResults, new String[]{property}, new Object[]{arg}, orders);
 	}
 
@@ -434,116 +419,96 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	@Override
 	public Object uniqueResultSql(final String sql, final Object... args) {
 		logger.debug("SQL unique query, sql:[{}], args count:{}.", sql, args.length);
-		return getHibernateTemplate().execute(new HibernateCallback<Object>() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				SQLQuery query = session.createSQLQuery(sql);
-				for (int i = 0; i < args.length; i++) {
-					query.setParameter(i, args[i]);
-				}
-				return query.uniqueResult();
-			}
-		});
+		SQLQuery query = getSession().createSQLQuery(sql);
+		for (int i = 0; i < args.length; i++) {
+			query.setParameter(i, args[i]);
+		}
+		return query.uniqueResult();
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#uniqueResultSql(java.lang.Class, java.lang.String, java.lang.Object[])
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T uniqueResultSql(Class<T> expectType, final String sql, final Object... args) {
+	public <T> T uniqueResultSql(final Class<T> expectType, final String sql, final Object... args) {
 		logger.debug("SQL unique query, expectType:{}, sql:[{}], args count:{}.", new Object[] { expectType.getName(), sql, args.length });
-		return getHibernateTemplate().execute(new HibernateCallback<T>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public T doInHibernate(Session session) throws HibernateException, SQLException {
-				SQLQuery query = session.createSQLQuery(sql);
-				for (int i = 0; i < args.length; i++) {
-					query.setParameter(i, args[i]);
-				}
-				return (T) query.uniqueResult();
-			}
-		});
+		SQLQuery query = getSession().createSQLQuery(sql);
+		for (int i = 0; i < args.length; i++) {
+			query.setParameter(i, args[i]);
+		}
+		return (T) query.uniqueResult();
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#criteria(org.hibernate.criterion.DetachedCriteria)
 	 */
 	@Override
-	public List<?> criteria(DetachedCriteria criteria) {
+	public List<?> criteria(final DetachedCriteria criteria) {
 		logger.debug("DetachedCriteria query:{}.", criteria);
-		return getHibernateTemplate().findByCriteria(criteria);
+		return criteria.getExecutableCriteria(getSession()).list();
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#callback(org.springframework.orm.hibernate3.HibernateCallback)
 	 */
 	@Override
-	public <T> T callback(HibernateCallback<T> callback) {
+	public <T> T callback(final HibernateCallback<T> callback) {
 		logger.debug("Callback Execute:{}.", callback);
-		return getHibernateTemplate().execute(callback);
+		try {
+			return callback.doInHibernate(getSession());
+		} catch (SQLException e) {
+			// never happend?
+			throw new HibernateException(e);
+		}
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#topResultHql(java.lang.Class, int, java.lang.String, java.lang.Object[])
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> topResultHql(Class<T> clazz, final int top, final String hql, final Object... args) {
-		return callback(new HibernateCallback<List<T>>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public List<T> doInHibernate(Session session) throws HibernateException, SQLException {
-				Query query = session.createQuery(hql);
-				query.setMaxResults(top);
-				if (args != null) {
-					for (int i = 0; i < args.length; i++) {
-						query.setParameter(i, args[i]);
-					}
-				}
-				return query.list();
+	public <T> List<T> topResultHql(final Class<T> clazz, final int top, final String hql, final Object... args) {
+		Query query = getSession().createQuery(hql);
+		query.setMaxResults(top);
+		if (args != null) {
+			for (int i = 0; i < args.length; i++) {
+				query.setParameter(i, args[i]);
 			}
-		});
+		}
+		return query.list();
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#topResultSql(java.lang.Class, int, java.lang.String, java.lang.Object[])
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> topResultSql(Class<T> clazz, final int top, final String sql, final Object... args) {
-		return callback(new HibernateCallback<List<T>>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public List<T> doInHibernate(Session session) throws HibernateException, SQLException {
-				SQLQuery sqlQuery = session.createSQLQuery(sql);
-				sqlQuery.setMaxResults(top);
-				if (args != null) {
-					for (int i = 0; i < args.length; i++) {
-						sqlQuery.setParameter(0, args[i]);
-					}
-				}
-				return sqlQuery.list();
+	public <T> List<T> topResultSql(final Class<T> clazz, final int top, final String sql, final Object... args) {
+		SQLQuery sqlQuery = getSession().createSQLQuery(sql);
+		sqlQuery.setMaxResults(top);
+		if (args != null) {
+			for (int i = 0; i < args.length; i++) {
+				sqlQuery.setParameter(0, args[i]);
 			}
-		});
+		}
+		return sqlQuery.list();
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#topResultHql(java.lang.Class, java.lang.String, java.lang.Object[])
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T topResultHql(Class<T> clazz, final String hql, final Object... args) {
-		return callback(new HibernateCallback<T>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public T doInHibernate(Session session) throws HibernateException, SQLException {
-				Query query = session.createQuery(hql);
-				query.setMaxResults(1);
-				if (args != null) {
-					for (int i = 0; i < args.length; i++) {
-						query.setParameter(i, args[i]);
-					}
-				}
-				return (T) query.uniqueResult();
+	public <T> T topResultHql(final Class<T> clazz, final String hql, final Object... args) {
+		Query query = getSession().createQuery(hql);
+		query.setMaxResults(1);
+		if (args != null) {
+			for (int i = 0; i < args.length; i++) {
+				query.setParameter(i, args[i]);
 			}
-		});
+		}
+		return (T) query.uniqueResult();
 	}
 
 	/**
@@ -551,19 +516,14 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	 */
 	@Override
 	public Object topResultHql(final String hql, final Object... args) {
-		return callback(new HibernateCallback<Object>() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query query = session.createQuery(hql);
-				query.setMaxResults(1);
-				if (args != null) {
-					for (int i = 0; i < args.length; i++) {
-						query.setParameter(i, args[i]);
-					}
-				}
-				return query.uniqueResult();
+		Query query = getSession().createQuery(hql);
+		query.setMaxResults(1);
+		if (args != null) {
+			for (int i = 0; i < args.length; i++) {
+				query.setParameter(i, args[i]);
 			}
-		});
+		}
+		return query.uniqueResult();
 	}
 
 	/**
@@ -571,40 +531,30 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	 */
 	@Override
 	public Object topResultSql(final String sql, final Object... args) {
-		return callback(new HibernateCallback<Object>() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				SQLQuery sqlQuery = session.createSQLQuery(sql);
-				sqlQuery.setMaxResults(1);
-				if (args != null) {
-					for (int i = 0; i < args.length; i++) {
-						sqlQuery.setParameter(0, args[i]);
-					}
-				}
-				return sqlQuery.uniqueResult();
+		SQLQuery sqlQuery = getSession().createSQLQuery(sql);
+		sqlQuery.setMaxResults(1);
+		if (args != null) {
+			for (int i = 0; i < args.length; i++) {
+				sqlQuery.setParameter(0, args[i]);
 			}
-		});
+		}
+		return sqlQuery.uniqueResult();
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#topResultSql(java.lang.Class, java.lang.String, java.lang.Object[])
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T topResultSql(Class<T> clazz, final String sql, final Object... args) {
-		return callback(new HibernateCallback<T>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public T doInHibernate(Session session) throws HibernateException, SQLException {
-				SQLQuery sqlQuery = session.createSQLQuery(sql);
-				sqlQuery.setMaxResults(1);
-				if (args != null) {
-					for (int i = 0; i < args.length; i++) {
-						sqlQuery.setParameter(0, args[i]);
-					}
-				}
-				return (T) sqlQuery.uniqueResult();
+	public <T> T topResultSql(final Class<T> clazz, final String sql, final Object... args) {
+		SQLQuery sqlQuery = getSession().createSQLQuery(sql);
+		sqlQuery.setMaxResults(1);
+		if (args != null) {
+			for (int i = 0; i < args.length; i++) {
+				sqlQuery.setParameter(0, args[i]);
 			}
-		});
+		}
+		return (T) sqlQuery.uniqueResult();
 	}
 
 	/**
@@ -612,24 +562,32 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> Iterator<T> iterate(Class<T> clazz, final String hql, final Object... args) {
-		return getHibernateTemplate().iterate(hql, args);
+	public <T> Iterator<T> iterate(final Class<T> clazz, final String hql, final Object... args) {
+		Query query = getSession().createQuery(hql);
+		for (int i=0;args!=null&&args.length<0;i++) {
+			query.setParameter(i, args);
+		}
+		return query.iterate();
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#closeIterator(java.util.Iterator)
 	 */
 	@Override
-	public void closeIterator(Iterator<?> iterator) {
-		getHibernateTemplate().closeIterator(iterator);
+	public void closeIterator(final Iterator<?> iterator) {
+		Hibernate.close(iterator);
 	}
 
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#bulkUpdateHql(java.lang.String, java.lang.Object[])
 	 */
 	@Override
-	public int bulkUpdateHql(String hql, Object... args) {
-		return getHibernateTemplate().bulkUpdate(hql, args);
+	public int bulkUpdateHql(final String hql, final Object... args) {
+		Query query = getSession().createQuery(hql);
+		for (int i=0;args!=null&&i<args.length;i++) {
+			query.setParameter(i, args[i]);
+		}
+		return query.executeUpdate();
 	}
 
 	/**
@@ -637,16 +595,11 @@ public class GenericDaoHibernate extends HibernateDaoSupport implements GenericD
 	 */
 	@Override
 	public int bulkUpdateSql(final String sql, final Object... args) {
-		return callback(new HibernateCallback<Integer>() {
-			@Override
-			public Integer doInHibernate(Session session) throws HibernateException, SQLException {
-				SQLQuery query = session.createSQLQuery(sql);
-				for (int i = 0; args != null && i < args.length; i++) {
-					query.setParameter(i, args[i]);
-				}
-				return query.executeUpdate();
-			}
-		});
+		SQLQuery query = getSession().createSQLQuery(sql);
+		for (int i = 0; args != null && i < args.length; i++) {
+			query.setParameter(i, args[i]);
+		}
+		return query.executeUpdate();
 	}
 
 }
