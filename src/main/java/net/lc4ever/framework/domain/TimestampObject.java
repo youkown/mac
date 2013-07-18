@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -17,7 +16,7 @@ import javax.persistence.TemporalType;
  * 
  * @author <a href="mailto:apeidou@gmail.com">Q-Wang</a>
  */
-@MappedSuperclass
+//@MappedSuperclass
 public abstract class TimestampObject<K extends Serializable> extends AbstractEntity<K> {
 
 	/**
@@ -59,7 +58,7 @@ public abstract class TimestampObject<K extends Serializable> extends AbstractEn
 	 * CREATE_TIMESTAMP
 	 * @param createTimestamp the createTimestamp to set
 	 */
-	public void setCreateTimestamp(Date createTimestamp) {
+	public void setCreateTimestamp(final Date createTimestamp) {
 		this.createTimestamp = createTimestamp;
 	}
 
@@ -81,7 +80,7 @@ public abstract class TimestampObject<K extends Serializable> extends AbstractEn
 	 * MODIFY_TIMESTAMP
 	 * @param modifyTimestamp the modifyTimestamp to set
 	 */
-	public void setModifyTimestamp(Date modifyTimestamp) {
+	public void setModifyTimestamp(final Date modifyTimestamp) {
 		this.modifyTimestamp = modifyTimestamp;
 	}
 
@@ -104,7 +103,7 @@ public abstract class TimestampObject<K extends Serializable> extends AbstractEn
 	 * DELETION_TAG
 	 * @param deletionTag the deletionTag to set
 	 */
-	public void setDeletionTag(boolean deletionTag) {
+	public void setDeletionTag(final boolean deletionTag) {
 		this.deletionTag = deletionTag;
 	}
 

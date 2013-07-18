@@ -7,13 +7,12 @@ package net.lc4ever.framework.domain;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
 
 
 /**
  * @author <a href="mailto:apeidou@gmail.com">Q-Wang</a>
  */
-@MappedSuperclass
+//@MappedSuperclass
 public abstract class AuditableObject<K extends Serializable> extends TimestampObject<K> {
 
 	/**
@@ -49,7 +48,7 @@ public abstract class AuditableObject<K extends Serializable> extends TimestampO
 	 * MODIFIERS_ID
 	 * @param modifiersId the modifiersId to set
 	 */
-	public void setModifiersId(String modifiersId) {
+	public void setModifiersId(final String modifiersId) {
 		this.modifiersId = modifiersId;
 	}
 
@@ -72,7 +71,7 @@ public abstract class AuditableObject<K extends Serializable> extends TimestampO
 	 * CREATORS_ID
 	 * @param creatorsId the creatorsId to set
 	 */
-	public void setCreatorsId(String creatorsId) {
+	public void setCreatorsId(final String creatorsId) {
 		this.creatorsId = creatorsId;
 	}
 
