@@ -24,7 +24,7 @@ public abstract class TimestampObject<K extends Serializable> extends AbstractEn
 	 * 
 	 * CREATE_TIMESTAMP
 	 */
-	protected Date createTimestamp;
+	protected Date createTimestamp = new Date();
 
 	/**
 	 * 修改时间戳.
