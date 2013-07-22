@@ -8,7 +8,7 @@
             <!-- param name="ConversionPattern"
                 value="%p - %C{1}.%M(%L) | %m%n"/-->
             <param name="ConversionPattern"
-            	value="[%-5p] %d{HH:mm:ss} %-16t %-40c{1} - %m%n"/>
+            	value="[%-5p] %d{HH:mm:ss} %-32t %-40c{1} - %m%n"/>
         </layout>
     </appender>
     
