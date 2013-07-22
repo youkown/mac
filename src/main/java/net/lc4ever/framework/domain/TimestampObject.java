@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -16,7 +17,7 @@ import javax.persistence.TemporalType;
  * 
  * @author <a href="mailto:apeidou@gmail.com">Q-Wang</a>
  */
-//@MappedSuperclass
+@MappedSuperclass
 public abstract class TimestampObject<K extends Serializable> extends AbstractEntity<K> {
 
 	/**
@@ -24,7 +25,7 @@ public abstract class TimestampObject<K extends Serializable> extends AbstractEn
 	 * 
 	 * CREATE_TIMESTAMP
 	 */
-	protected Date createTimestamp = new Date();
+	protected Date createTimestamp;
 
 	/**
 	 * 修改时间戳.
@@ -38,7 +39,7 @@ public abstract class TimestampObject<K extends Serializable> extends AbstractEn
 	 * 
 	 * DELETION_TAG
 	 */
-	protected boolean deletionTag;
+	protected Boolean deletionTag;
 
 	/**
 	 * 创建时间戳.
@@ -46,7 +47,7 @@ public abstract class TimestampObject<K extends Serializable> extends AbstractEn
 	 * CREATE_TIMESTAMP
 	 * @return the createTimestamp
 	 */
-	@Column(name = "CREATE_TIMESTAMP", nullable = false, updatable = false)
+	@Column(name = "CREATE_TIMESTAMP", updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCreateTimestamp() {
 		return createTimestamp;
@@ -92,7 +93,7 @@ public abstract class TimestampObject<K extends Serializable> extends AbstractEn
 	 * @return the deletionTag
 	 */
 	@Column(name="DELETION_TAG")
-	public boolean isDeletionTag() {
+	public Boolean isDeletionTag() {
 		return deletionTag;
 	}
 
@@ -103,7 +104,7 @@ public abstract class TimestampObject<K extends Serializable> extends AbstractEn
 	 * DELETION_TAG
 	 * @param deletionTag the deletionTag to set
 	 */
-	public void setDeletionTag(final boolean deletionTag) {
+	public void setDeletionTag(final Boolean deletionTag) {
 		this.deletionTag = deletionTag;
 	}
 
