@@ -16,6 +16,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,9 +49,14 @@ public class DebugFilter implements Filter {
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		if (isDebugEnabled) {
 			HttpServletRequest req = (HttpServletRequest)request;
-			logger.debug("RequestURL:{}\t{}",req.getDispatcherType(),req.getRequestURL());
+			HttpServletResponse res = (HttpServletResponse) response;
+			String url = req.getRequestURL().toString();
+			logger.debug("Request :{}\t{}\t{}",req.getMethod(),req.getDispatcherType(),url);
+			chain.doFilter(request, response);
+			logger.debug("Response:{}\t{}",url, res.getStatus());
+		} else {
+			chain.doFilter(request, response);
 		}
-		chain.doFilter(request, response);
 	}
 
 	/**
