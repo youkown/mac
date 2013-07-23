@@ -32,7 +32,7 @@ public interface GenericCrudService {
 	 * @param clazz EntityBean 类型
 	 * @return select结果集
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <E extends BaseEntity<ID>, ID extends Serializable> List<E> list(final Class<E> clazz);
 
 	/**
