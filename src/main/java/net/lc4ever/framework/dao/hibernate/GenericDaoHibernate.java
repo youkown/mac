@@ -200,7 +200,7 @@ public class GenericDaoHibernate implements GenericDao {
 		logger.trace("HQL query, hql:[{}], args count:{}.", hql, args==null?0:args.length);
 		Query query = getSession().createQuery(hql);
 		for (int i=0;args!=null&&i<args.length;i++) {
-			query.setParameter(i, args[i]);
+			query.setParameter(i+1, args[i]);
 		}
 		return query.list();
 	}
@@ -244,7 +244,7 @@ public class GenericDaoHibernate implements GenericDao {
 		logger.trace("SQL query, sql:[{}], args count:{}.", sql, args==null?0:args.length);
 		SQLQuery query = getSession().createSQLQuery(sql);
 		for (int i = 0; args!=null&&i < args.length; i++) {
-			query.setParameter(i, args[i]);
+			query.setParameter(i+1, args[i]);
 		}
 		return query.list();
 	}
@@ -257,7 +257,7 @@ public class GenericDaoHibernate implements GenericDao {
 		logger.trace("SQL query with page, sql:[{}], args count:{}, firstResult:{}, maxResults:{}", sql, args==null?0:args.length, firstResult, maxResults);
 		SQLQuery query = getSession().createSQLQuery(sql);
 		for (int i = 0; args!=null&&i < args.length; i++) {
-			query.setParameter(i, args[i]);
+			query.setParameter(i+1, args[i]);
 		}
 		query.setFirstResult((int)firstResult);
 		query.setMaxResults((int)maxResults);
@@ -290,7 +290,7 @@ public class GenericDaoHibernate implements GenericDao {
 		logger.trace("HQL unique query, hql:[{}], args count:{}.", hql, args==null?0:args.length);
 		Query query = getSession().createQuery(hql);
 		for (int i=0;args!=null&&i<args.length;i++) {
-			query.setParameter(i, args[i]);
+			query.setParameter(i+1, args[i]);
 		}
 		return query.uniqueResult();
 	}
@@ -421,7 +421,7 @@ public class GenericDaoHibernate implements GenericDao {
 		logger.debug("SQL unique query, sql:[{}], args count:{}.", sql, args.length);
 		SQLQuery query = getSession().createSQLQuery(sql);
 		for (int i = 0; i < args.length; i++) {
-			query.setParameter(i, args[i]);
+			query.setParameter(i+1, args[i]);
 		}
 		return query.uniqueResult();
 	}
@@ -435,7 +435,7 @@ public class GenericDaoHibernate implements GenericDao {
 		logger.debug("SQL unique query, expectType:{}, sql:[{}], args count:{}.", new Object[] { expectType.getName(), sql, args.length });
 		SQLQuery query = getSession().createSQLQuery(sql);
 		for (int i = 0; i < args.length; i++) {
-			query.setParameter(i, args[i]);
+			query.setParameter(i+1, args[i]);
 		}
 		return (T) query.uniqueResult();
 	}
@@ -473,7 +473,7 @@ public class GenericDaoHibernate implements GenericDao {
 		query.setMaxResults(top);
 		if (args != null) {
 			for (int i = 0; i < args.length; i++) {
-				query.setParameter(i, args[i]);
+				query.setParameter(i+1, args[i]);
 			}
 		}
 		return query.list();
@@ -489,7 +489,7 @@ public class GenericDaoHibernate implements GenericDao {
 		sqlQuery.setMaxResults(top);
 		if (args != null) {
 			for (int i = 0; i < args.length; i++) {
-				sqlQuery.setParameter(0, args[i]);
+				sqlQuery.setParameter(i+1, args[i]);
 			}
 		}
 		return sqlQuery.list();
@@ -505,7 +505,7 @@ public class GenericDaoHibernate implements GenericDao {
 		query.setMaxResults(1);
 		if (args != null) {
 			for (int i = 0; i < args.length; i++) {
-				query.setParameter(i, args[i]);
+				query.setParameter(i+1, args[i]);
 			}
 		}
 		return (T) query.uniqueResult();
@@ -520,7 +520,7 @@ public class GenericDaoHibernate implements GenericDao {
 		query.setMaxResults(1);
 		if (args != null) {
 			for (int i = 0; i < args.length; i++) {
-				query.setParameter(i, args[i]);
+				query.setParameter(i+1, args[i]);
 			}
 		}
 		return query.uniqueResult();
@@ -551,7 +551,7 @@ public class GenericDaoHibernate implements GenericDao {
 		sqlQuery.setMaxResults(1);
 		if (args != null) {
 			for (int i = 0; i < args.length; i++) {
-				sqlQuery.setParameter(0, args[i]);
+				sqlQuery.setParameter(i+1, args[i]);
 			}
 		}
 		return (T) sqlQuery.uniqueResult();
@@ -565,7 +565,7 @@ public class GenericDaoHibernate implements GenericDao {
 	public <T> Iterator<T> iterate(final Class<T> clazz, final String hql, final Object... args) {
 		Query query = getSession().createQuery(hql);
 		for (int i=0;args!=null&&args.length<0;i++) {
-			query.setParameter(i, args);
+			query.setParameter(i+1, args);
 		}
 		return query.iterate();
 	}
@@ -585,7 +585,7 @@ public class GenericDaoHibernate implements GenericDao {
 	public int bulkUpdateHql(final String hql, final Object... args) {
 		Query query = getSession().createQuery(hql);
 		for (int i=0;args!=null&&i<args.length;i++) {
-			query.setParameter(i, args[i]);
+			query.setParameter(i+1, args[i]);
 		}
 		return query.executeUpdate();
 	}
@@ -597,7 +597,7 @@ public class GenericDaoHibernate implements GenericDao {
 	public int bulkUpdateSql(final String sql, final Object... args) {
 		SQLQuery query = getSession().createSQLQuery(sql);
 		for (int i = 0; args != null && i < args.length; i++) {
-			query.setParameter(i, args[i]);
+			query.setParameter(i+1, args[i]);
 		}
 		return query.executeUpdate();
 	}
