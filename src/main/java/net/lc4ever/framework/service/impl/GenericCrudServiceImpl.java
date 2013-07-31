@@ -14,6 +14,7 @@ import net.lc4ever.framework.service.GenericCrudService;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.transform.ResultTransformer;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
 
@@ -329,6 +330,80 @@ public class GenericCrudServiceImpl implements GenericCrudService {
 		return genericDao.bulkUpdateSql(sql, args);
 	}
 
+
+	// unimplements methods
+
+	/**
+	 * @see net.lc4ever.framework.service.GenericCrudService#sql(org.hibernate.transform.ResultTransformer, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public List<?> sql(final ResultTransformer resultTransformer, final String sql, final Object... args) {
+		return genericDao.sql(resultTransformer, sql, args);
+	}
+
+	/**
+	 * @see net.lc4ever.framework.service.GenericCrudService#sql(org.hibernate.transform.ResultTransformer, long, long, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public List<?> sql(final ResultTransformer resultTransformer, final long firstResult, final long maxResults, final String sql, final Object... args) {
+		return genericDao.sql(resultTransformer, firstResult, maxResults, sql, args);
+	}
+
+	/**
+	 * @see net.lc4ever.framework.service.GenericCrudService#sql(java.lang.Class, org.hibernate.transform.ResultTransformer, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public <T> List<T> sql(final Class<T> expectType, final ResultTransformer resultTransformer, final String sql, final Object... args) {
+		return genericDao.sql(expectType, resultTransformer, sql, args);
+	}
+
+	/**
+	 * @see net.lc4ever.framework.service.GenericCrudService#sql(java.lang.Class, org.hibernate.transform.ResultTransformer, long, long, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public <T> List<T> sql(final Class<T> expectType, final ResultTransformer resultTransformer, final long firstResult, final long maxResults, final String sql, final Object... args) {
+		return genericDao.sql(expectType, resultTransformer, firstResult, maxResults, sql, args);
+	}
+
+	/**
+	 * @see net.lc4ever.framework.service.GenericCrudService#uniqueResultSql(org.hibernate.transform.ResultTransformer, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public Object uniqueResultSql(final ResultTransformer resultTransformer, final String sql, final Object... args) {
+		return genericDao.uniqueResultSql(resultTransformer, sql, args);
+	}
+
+	/**
+	 * @see net.lc4ever.framework.service.GenericCrudService#uniqueResultSql(java.lang.Class, org.hibernate.transform.ResultTransformer, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public <T> T uniqueResultSql(final Class<T> expectType, final ResultTransformer resultTransformer, final String sql, final Object... args) {
+		return genericDao.uniqueResultSql(expectType, resultTransformer, sql, args);
+	}
+
+	/**
+	 * @see net.lc4ever.framework.service.GenericCrudService#topResultSql(org.hibernate.transform.ResultTransformer, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public Object topResultSql(final ResultTransformer resultTransformer, final String sql, final Object... args) {
+		return genericDao.topResultSql(resultTransformer, sql, args);
+	}
+
+	/**
+	 * @see net.lc4ever.framework.service.GenericCrudService#topResultSql(java.lang.Class, org.hibernate.transform.ResultTransformer, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public <T> T topResultSql(final Class<T> clazz, final ResultTransformer resultTransformer, final String sql, final Object... args) {
+		return genericDao.topResultSql(clazz, resultTransformer, sql, args);
+	}
+
+	/**
+	 * @see net.lc4ever.framework.service.GenericCrudService#topResultSql(java.lang.Class, org.hibernate.transform.ResultTransformer, int, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public <T> List<T> topResultSql(final Class<T> clazz, final ResultTransformer resultTransformer, final int top, final String sql, final Object... args) {
+		return genericDao.topResultSql(clazz, resultTransformer, top, sql, args);
+	}
 
 
 }
