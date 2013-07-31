@@ -56,6 +56,13 @@ public abstract class AbstractQueryHibernate<T extends Query<?,?>, U, W> impleme
 		orders.add(order);
 	}
 
+	@SuppressWarnings("unchecked")
+	protected T addCriterion(final Criterion criterion) {
+		if (criterions==null) criterions = new ArrayList<Criterion>();
+		criterions.add(criterion);
+		return (T) this;
+	}
+
 	/**
 	 * @see org.activiti.engine.query.Query#asc()
 	 */
