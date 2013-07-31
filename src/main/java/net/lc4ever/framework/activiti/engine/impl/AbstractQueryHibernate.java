@@ -47,13 +47,20 @@ public abstract class AbstractQueryHibernate<T extends Query<?,?>, U, W> impleme
 
 	protected List<Order> orders;
 
-	protected String orderField;
+	private String orderField;
 
 	protected void addOrder(final Order order) {
 		if (orders==null) {
 			orders = new ArrayList<Order>();
 		}
 		orders.add(order);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected T addOrderField(final String orderField) {
+		if (this.orderField!=null) throw new IllegalStateException("Previous Order Field not given asc or desc:"+this.orderField);
+		this.orderField = orderField;
+		return (T) this;
 	}
 
 	@SuppressWarnings("unchecked")
