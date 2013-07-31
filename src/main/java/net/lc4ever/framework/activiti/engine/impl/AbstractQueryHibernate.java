@@ -11,6 +11,7 @@ import java.util.List;
 import net.lc4ever.framework.service.GenericCrudService;
 
 import org.activiti.engine.query.Query;
+import org.apache.commons.lang.NotImplementedException;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -191,9 +192,8 @@ public abstract class AbstractQueryHibernate<T extends Query<?,?>, U, W> impleme
 		return (List<U>) results;
 	}
 
-	@SuppressWarnings("unchecked")
 	protected U wrap(final W tobeWrap) {
-		return (U) tobeWrap;
+		throw new NotImplementedException("wrap() method must implemented when needWrap is true.");
 	};
 
 }
