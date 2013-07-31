@@ -58,7 +58,9 @@ public abstract class AbstractSqlQueryHibernate<T extends Query<?,?>, U> impleme
 	private StringBuilder getSql() {
 		StringBuilder sql = new StringBuilder(getSelectCause());
 		sql.append(sqlWhere);
-		sql.append(orders);
+		if (orders.length()>0) {
+			sql.append("order by ").append(orders);
+		}
 		return sql;
 	}
 
