@@ -13,6 +13,7 @@ import net.lc4ever.framework.domain.BaseEntity;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.transform.ResultTransformer;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -189,6 +190,8 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public List<?> sql(final String sql, final Object... args);
 
+	public List<?> sql(final ResultTransformer resultTransformer, final String sql, final Object... args);
+
 	/**
 	 * 
 	 * @param firstResult 起始条目数
@@ -200,6 +203,8 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public List<?> sql(final long firstResult, final long maxResults, final String sql, final Object... args);
 
+	public List<?> sql(final ResultTransformer resultTransformer, final long firstResult, final long maxResults, final String sql, final Object... args);
+
 	/**
 	 * 数据库原生SQL查询.
 	 * 
@@ -209,6 +214,8 @@ public interface GenericCrudService {
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> List<T> sql(final Class<T> expectType, final String sql, final Object... args);
+
+	public <T> List<T> sql(final Class<T> expectType, final ResultTransformer resultTransformer, final String sql, final Object... args);
 
 	/**
 	 * 数据库原生SQL查询.
@@ -223,6 +230,8 @@ public interface GenericCrudService {
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> List<T> sql(final Class<T> expectType, final long firstResult, final long maxResults, final String sql, final Object... args);
+
+	public <T> List<T> sql(final Class<T> expectType, final ResultTransformer resultTransformer, final long firstResult, final long maxResults, final String sql, final Object... args);
 
 	/**
 	 * 单一结果HQL查询.
@@ -260,6 +269,8 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public Object uniqueResultSql(final String sql, final Object... args);
 
+	public Object uniqueResultSql(ResultTransformer resultTransformer, String sql, Object... args);
+
 	/**
 	 * 单一结果SQL查询.
 	 * 
@@ -271,6 +282,8 @@ public interface GenericCrudService {
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> T uniqueResultSql(final Class<T> expectType, final String sql, final Object... args);
+
+	public <T> T uniqueResultSql(Class<T> expectType, ResultTransformer resultTransformer, String sql, Object... args);
 
 	/**
 	 * DetachedCriteria查询.
@@ -415,6 +428,8 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public Object topResultSql(final String sql, final Object... args);
 
+	public Object topResultSql(ResultTransformer resultTransformer, String sql, Object... args);
+
 	/**
 	 * Only First Result Version of {@link #sql(Class, String, Object...)}.
 	 * 
@@ -425,6 +440,8 @@ public interface GenericCrudService {
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> T topResultSql(final Class<T> clazz, final String sql, final Object... args);
+
+	public <T> T topResultSql(Class<T> clazz, ResultTransformer resultTransformer, String sql, Object... args);
 
 	/**
 	 * Max ResultSize Version of {@link #hql(Class, String, Object...)}.
@@ -449,6 +466,8 @@ public interface GenericCrudService {
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> List<T> topResultSql(final Class<T> clazz, final int top, final String sql, final Object... args);
+
+	public <T> List<T> topResultSql(Class<T> clazz, ResultTransformer resultTransformer, int top, String sql, Object... args);
 
 	/**
 	 * Iterator version of {@link #hql(Class, String, Object...)}.
