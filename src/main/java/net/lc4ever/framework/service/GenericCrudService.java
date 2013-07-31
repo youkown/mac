@@ -190,6 +190,11 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public List<?> sql(final String sql, final Object... args);
 
+	/**
+	 * @param resultTransformer {@link ResultTransformer}
+	 * @see #sql(String, Object...)
+	 */
+	@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
 	public List<?> sql(final ResultTransformer resultTransformer, final String sql, final Object... args);
 
 	/**
@@ -203,6 +208,11 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public List<?> sql(final long firstResult, final long maxResults, final String sql, final Object... args);
 
+	/**
+	 * @param resultTransformer {@link ResultTransformer}
+	 * @see #sql(long, long, String, Object...)
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public List<?> sql(final ResultTransformer resultTransformer, final long firstResult, final long maxResults, final String sql, final Object... args);
 
 	/**
@@ -215,6 +225,11 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> List<T> sql(final Class<T> expectType, final String sql, final Object... args);
 
+	/**
+	 * @param resultTransformer {@link ResultTransformer}
+	 * @see #sql(Class, String, Object...)
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> List<T> sql(final Class<T> expectType, final ResultTransformer resultTransformer, final String sql, final Object... args);
 
 	/**
@@ -231,6 +246,11 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> List<T> sql(final Class<T> expectType, final long firstResult, final long maxResults, final String sql, final Object... args);
 
+	/**
+	 * @param resultTransformer {@link ResultTransformer}
+	 * @see #sql(Class, long, long, String, Object...)
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> List<T> sql(final Class<T> expectType, final ResultTransformer resultTransformer, final long firstResult, final long maxResults, final String sql, final Object... args);
 
 	/**
@@ -269,6 +289,11 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public Object uniqueResultSql(final String sql, final Object... args);
 
+	/**
+	 * @param resultTransformer {@link ResultTransformer}
+	 * @see #uniqueResultSql(String, Object...)
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public Object uniqueResultSql(ResultTransformer resultTransformer, String sql, Object... args);
 
 	/**
@@ -283,6 +308,11 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> T uniqueResultSql(final Class<T> expectType, final String sql, final Object... args);
 
+	/**
+	 * @param resultTransformer {@link ResultTransformer}
+	 * @see #uniqueResultSql(Class, String, Object...)
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> T uniqueResultSql(Class<T> expectType, ResultTransformer resultTransformer, String sql, Object... args);
 
 	/**
@@ -428,6 +458,11 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public Object topResultSql(final String sql, final Object... args);
 
+	/**
+	 * @param resultTransformer {@link ResultTransformer}
+	 * @see #topResultSql(String, Object...)
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public Object topResultSql(ResultTransformer resultTransformer, String sql, Object... args);
 
 	/**
@@ -441,6 +476,11 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> T topResultSql(final Class<T> clazz, final String sql, final Object... args);
 
+	/**
+	 * @param resultTransformer {@link ResultTransformer}
+	 * @see #topResultSql(Class, String, Object...)
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> T topResultSql(Class<T> clazz, ResultTransformer resultTransformer, String sql, Object... args);
 
 	/**
@@ -467,6 +507,11 @@ public interface GenericCrudService {
 	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> List<T> topResultSql(final Class<T> clazz, final int top, final String sql, final Object... args);
 
+	/**
+	 * @param resultTransformer {@link ResultTransformer}
+	 * @see #topResultHql(Class, int, String, Object...)
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
 	public <T> List<T> topResultSql(Class<T> clazz, ResultTransformer resultTransformer, int top, String sql, Object... args);
 
 	/**
