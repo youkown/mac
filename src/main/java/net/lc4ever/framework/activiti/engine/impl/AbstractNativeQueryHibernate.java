@@ -16,8 +16,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.ResultTransformer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
 
@@ -25,8 +23,6 @@ import org.springframework.orm.hibernate3.HibernateCallback;
  * @author <a href="mailto:apeidou@gmail.com">Q-Wang</a>
  */
 public abstract class AbstractNativeQueryHibernate<T extends NativeQuery< ? , ? >, U> implements NativeQuery<T, U> {
-
-	private static final Logger logger = LoggerFactory.getLogger(AbstractNativeQueryHibernate.class);
 
 	private static final String COUNT_PREFIX = "select count(*) from (";
 	private static final String COUNT_SUFFIX = ")";
@@ -47,6 +43,7 @@ public abstract class AbstractNativeQueryHibernate<T extends NativeQuery< ? , ? 
 	/**
 	 * @see org.activiti.engine.query.NativeQuery#sql(java.lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public T sql(final String selectClause) {
 		this.selectClause = selectClause;
@@ -56,6 +53,7 @@ public abstract class AbstractNativeQueryHibernate<T extends NativeQuery< ? , ? 
 	/**
 	 * @see org.activiti.engine.query.NativeQuery#parameter(java.lang.String, java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public T parameter(final String name, final Object value) {
 		if (parameters==null) parameters = new HashMap<String, Object>();
@@ -68,6 +66,7 @@ public abstract class AbstractNativeQueryHibernate<T extends NativeQuery< ? , ? 
 	 */
 	@Override
 	public long count() {
+		// TODO Any cute idea for count sql?
 		return crudService.callback(new HibernateCallback<Long>() {
 			@Override
 			public Long doInHibernate(final Session session) throws HibernateException, SQLException {
@@ -89,6 +88,7 @@ public abstract class AbstractNativeQueryHibernate<T extends NativeQuery< ? , ? 
 	@Override
 	public U singleResult() {
 		return crudService.callback(new HibernateCallback<U>() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public U doInHibernate(final Session session) throws HibernateException, SQLException {
 				SQLQuery query = session.createSQLQuery(selectClause);
@@ -109,6 +109,7 @@ public abstract class AbstractNativeQueryHibernate<T extends NativeQuery< ? , ? 
 	@Override
 	public List<U> list() {
 		return crudService.callback(new HibernateCallback<List<U>>() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public List<U> doInHibernate(final Session session) throws HibernateException, SQLException {
 				SQLQuery query = session.createSQLQuery(selectClause);
@@ -129,6 +130,7 @@ public abstract class AbstractNativeQueryHibernate<T extends NativeQuery< ? , ? 
 	@Override
 	public List<U> listPage(final int firstResult, final int maxResults) {
 		return crudService.callback(new HibernateCallback<List<U>>() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public List<U> doInHibernate(final Session session) throws HibernateException, SQLException {
 				SQLQuery query = session.createSQLQuery(selectClause);
