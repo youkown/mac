@@ -12,6 +12,7 @@ import net.lc4ever.framework.domain.BaseEntity;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.transform.ResultTransformer;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
 /**
@@ -100,5 +101,25 @@ public interface GenericDao {
 	public int bulkUpdateHql(String hql, Object... args);
 
 	public int bulkUpdateSql(final String sql, final Object... args);
+
+
+
+	public List<?> sql(final ResultTransformer resultTransformer, final String sql, final Object... args);
+
+	public List<?> sql(final ResultTransformer resultTransformer, final long firstResult, final long maxResults, final String sql, final Object... args);
+
+	public <T> List<T> sql(final Class<T> expectType, final ResultTransformer resultTransformer, final String sql, final Object... args);
+
+	public <T> List<T> sql(final Class<T> expectType, final ResultTransformer resultTransformer, final long firstResult, final long maxResults, final String sql, final Object... args);
+
+	public Object uniqueResultSql(final ResultTransformer resultTransformer, final String sql, final Object... args);
+
+	public <T> T uniqueResultSql(final Class<T> expectType, final ResultTransformer resultTransformer, final String sql, final Object... args);
+
+	public Object topResultSql(final ResultTransformer resultTransformer, final String sql, final Object... args);
+
+	public <T> T topResultSql(final Class<T> clazz, final ResultTransformer resultTransformer, final String sql, final Object... args);
+
+	public <T> List<T> topResultSql(final Class<T> clazz, final ResultTransformer resultTransformer, final int top, final String sql, final Object... args);
 
 }

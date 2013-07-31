@@ -23,6 +23,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.ResultTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate3.HibernateCallback;
@@ -241,12 +242,7 @@ public class GenericDaoHibernate implements GenericDao {
 	 */
 	@Override
 	public List<?> sql(final String sql, final Object... args) {
-		logger.trace("SQL query, sql:[{}], args count:{}.", sql, args==null?0:args.length);
-		SQLQuery query = getSession().createSQLQuery(sql);
-		for (int i = 0; args!=null&&i < args.length; i++) {
-			query.setParameter(i, args[i]);
-		}
-		return query.list();
+		return sql((ResultTransformer)null,sql,args);
 	}
 
 	/**
@@ -254,14 +250,7 @@ public class GenericDaoHibernate implements GenericDao {
 	 */
 	@Override
 	public List<?> sql(final long firstResult, final long maxResults, final String sql, final Object... args) {
-		logger.trace("SQL query with page, sql:[{}], args count:{}, firstResult:{}, maxResults:{}", sql, args==null?0:args.length, firstResult, maxResults);
-		SQLQuery query = getSession().createSQLQuery(sql);
-		for (int i = 0; args!=null&&i < args.length; i++) {
-			query.setParameter(i, args[i]);
-		}
-		query.setFirstResult((int)firstResult);
-		query.setMaxResults((int)maxResults);
-		return query.list();
+		return sql((ResultTransformer)null,firstResult,maxResults,sql,args);
 	}
 
 	/**
@@ -418,12 +407,7 @@ public class GenericDaoHibernate implements GenericDao {
 	 */
 	@Override
 	public Object uniqueResultSql(final String sql, final Object... args) {
-		logger.debug("SQL unique query, sql:[{}], args count:{}.", sql, args.length);
-		SQLQuery query = getSession().createSQLQuery(sql);
-		for (int i = 0; i < args.length; i++) {
-			query.setParameter(i, args[i]);
-		}
-		return query.uniqueResult();
+		return uniqueResultSql((ResultTransformer)null, sql, args);
 	}
 
 	/**
@@ -482,17 +466,9 @@ public class GenericDaoHibernate implements GenericDao {
 	/**
 	 * @see sinonet.framework.dao.GenericDAO#topResultSql(java.lang.Class, int, java.lang.String, java.lang.Object[])
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> topResultSql(final Class<T> clazz, final int top, final String sql, final Object... args) {
-		SQLQuery sqlQuery = getSession().createSQLQuery(sql);
-		sqlQuery.setMaxResults(top);
-		if (args != null) {
-			for (int i = 0; i < args.length; i++) {
-				sqlQuery.setParameter(i, args[i]);
-			}
-		}
-		return sqlQuery.list();
+		return topResultSql(clazz, null, top, sql, args);
 	}
 
 	/**
@@ -531,14 +507,7 @@ public class GenericDaoHibernate implements GenericDao {
 	 */
 	@Override
 	public Object topResultSql(final String sql, final Object... args) {
-		SQLQuery sqlQuery = getSession().createSQLQuery(sql);
-		sqlQuery.setMaxResults(1);
-		if (args != null) {
-			for (int i = 0; i < args.length; i++) {
-				sqlQuery.setParameter(0, args[i]);
-			}
-		}
-		return sqlQuery.uniqueResult();
+		return topResultSql((ResultTransformer)null, sql, args);
 	}
 
 	/**
@@ -547,14 +516,7 @@ public class GenericDaoHibernate implements GenericDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T topResultSql(final Class<T> clazz, final String sql, final Object... args) {
-		SQLQuery sqlQuery = getSession().createSQLQuery(sql);
-		sqlQuery.setMaxResults(1);
-		if (args != null) {
-			for (int i = 0; i < args.length; i++) {
-				sqlQuery.setParameter(i, args[i]);
-			}
-		}
-		return (T) sqlQuery.uniqueResult();
+		return (T) topResultSql(sql,args);
 	}
 
 	/**
@@ -600,6 +562,129 @@ public class GenericDaoHibernate implements GenericDao {
 			query.setParameter(i, args[i]);
 		}
 		return query.executeUpdate();
+	}
+
+	/**
+	 * @see net.lc4ever.framework.dao.GenericDao#sql(org.hibernate.transform.ResultTransformer, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public List<?> sql(final ResultTransformer resultTransformer, final String sql, final Object... args) {
+		logger.trace("SQL query, sql:[{}], args count:{}.", sql, args==null?0:args.length);
+		SQLQuery query = getSession().createSQLQuery(sql);
+		for (int i = 0; args!=null&&i < args.length; i++) {
+			query.setParameter(i, args[i]);
+		}
+		if (resultTransformer!=null) {
+			query.setResultTransformer(resultTransformer);
+		}
+		return query.list();
+	}
+
+	/**
+	 * @see net.lc4ever.framework.dao.GenericDao#sql(org.hibernate.transform.ResultTransformer, long, long, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public List<?> sql(final ResultTransformer resultTransformer, final long firstResult, final long maxResults, final String sql, final Object... args) {
+		logger.trace("SQL query with page, sql:[{}], args count:{}, firstResult:{}, maxResults:{}", sql, args==null?0:args.length, firstResult, maxResults);
+		SQLQuery query = getSession().createSQLQuery(sql);
+		for (int i = 0; args!=null&&i < args.length; i++) {
+			query.setParameter(i, args[i]);
+		}
+		query.setFirstResult((int)firstResult);
+		query.setMaxResults((int)maxResults);
+		if (resultTransformer!=null) {
+			query.setResultTransformer(resultTransformer);
+		}
+		return query.list();
+	}
+
+	/**
+	 * @see net.lc4ever.framework.dao.GenericDao#sql(java.lang.Class, org.hibernate.transform.ResultTransformer, java.lang.String, java.lang.Object[])
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> List<T> sql(final Class<T> expectType, final ResultTransformer resultTransformer, final String sql, final Object... args) {
+		return (List<T>) sql(resultTransformer, sql, args);
+	}
+
+	/**
+	 * @see net.lc4ever.framework.dao.GenericDao#sql(java.lang.Class, org.hibernate.transform.ResultTransformer, long, long, java.lang.String, java.lang.Object[])
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> List<T> sql(final Class<T> expectType, final ResultTransformer resultTransformer, final long firstResult, final long maxResults, final String sql, final Object... args) {
+		return (List<T>) sql(resultTransformer, firstResult, maxResults, sql, args);
+	}
+
+	/**
+	 * @see net.lc4ever.framework.dao.GenericDao#uniqueResultSql(org.hibernate.transform.ResultTransformer, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public Object uniqueResultSql(final ResultTransformer resultTransformer, final String sql, final Object... args) {
+		logger.debug("SQL unique query, sql:[{}], args count:{}.", sql, args.length);
+		SQLQuery query = getSession().createSQLQuery(sql);
+		for (int i = 0; i < args.length; i++) {
+			query.setParameter(i, args[i]);
+		}
+		if (resultTransformer!=null) {
+			query.setResultTransformer(resultTransformer);
+		}
+		return query.uniqueResult();
+	}
+
+	/**
+	 * @see net.lc4ever.framework.dao.GenericDao#uniqueResultSql(java.lang.Class, org.hibernate.transform.ResultTransformer, java.lang.String, java.lang.Object[])
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T uniqueResultSql(final Class<T> expectType, final ResultTransformer resultTransformer, final String sql, final Object... args) {
+		return (T) uniqueResultSql(resultTransformer, sql, args);
+	}
+
+	/**
+	 * @see net.lc4ever.framework.dao.GenericDao#topResultSql(org.hibernate.transform.ResultTransformer, java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public Object topResultSql(final ResultTransformer resultTransformer, final String sql, final Object... args) {
+		SQLQuery sqlQuery = getSession().createSQLQuery(sql);
+		sqlQuery.setMaxResults(1);
+		if (args != null) {
+			for (int i = 0; i < args.length; i++) {
+				sqlQuery.setParameter(0, args[i]);
+			}
+		}
+		if (resultTransformer!=null) {
+			sqlQuery.setResultTransformer(resultTransformer);
+		}
+		return sqlQuery.uniqueResult();
+	}
+
+	/**
+	 * @see net.lc4ever.framework.dao.GenericDao#topResultSql(java.lang.Class, org.hibernate.transform.ResultTransformer, java.lang.String, java.lang.Object[])
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T topResultSql(final Class<T> clazz, final ResultTransformer resultTransformer, final String sql, final Object... args) {
+		return (T) topResultSql(resultTransformer, sql, args);
+	}
+
+	/**
+	 * @see net.lc4ever.framework.dao.GenericDao#topResultSql(java.lang.Class, org.hibernate.transform.ResultTransformer, int, java.lang.String, java.lang.Object[])
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> List<T> topResultSql(final Class<T> clazz, final ResultTransformer resultTransformer, final int top, final String sql, final Object... args) {
+		SQLQuery sqlQuery = getSession().createSQLQuery(sql);
+		sqlQuery.setMaxResults(top);
+		if (args != null) {
+			for (int i = 0; i < args.length; i++) {
+				sqlQuery.setParameter(i, args[i]);
+			}
+		}
+		if (resultTransformer!=null) {
+			sqlQuery.setResultTransformer(resultTransformer);
+		}
+		return sqlQuery.list();
 	}
 
 }
