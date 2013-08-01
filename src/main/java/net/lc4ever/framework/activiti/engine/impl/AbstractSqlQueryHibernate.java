@@ -28,8 +28,8 @@ public abstract class AbstractSqlQueryHibernate<T extends Query<?,?>, U> impleme
 		this.resultTransformer = resultTransformer;
 	}
 
-	public static final String SQL_COUNT_PREFIX = "select count(*) from (";
-	public static final String SQL_COUNT_SUFFIX = ")";
+	public static final String SQL_COUNT_PREFIX = "select count(*) from ( ";
+	public static final String SQL_COUNT_SUFFIX = " )";
 
 	private String orderField;
 
@@ -101,7 +101,7 @@ public abstract class AbstractSqlQueryHibernate<T extends Query<?,?>, U> impleme
 	 */
 	@Override
 	public long count() {
-		return crudService.uniqueResultSql(Number.class, getCountSql() , parameters.toArray()).longValue();
+		return crudService.uniqueResultSql(Number.class, getCountSql(), parameters.toArray()).longValue();
 	}
 
 	/**
