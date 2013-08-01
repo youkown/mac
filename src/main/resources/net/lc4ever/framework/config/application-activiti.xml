@@ -16,6 +16,7 @@
 		<property name="transactionManager" ref="transactionManager" />
 		<property name="databaseSchemaUpdate" value="true" />
 		<property name="jobExecutorActivate" value="true" />
+		<property name="identityService" ref="altIdentityService"/>
 		<!-- 
 		<property name="customFormTypes">
 			<list>
