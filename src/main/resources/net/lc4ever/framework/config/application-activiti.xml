@@ -17,6 +17,9 @@
 		<property name="databaseSchemaUpdate" value="true" />
 		<property name="jobExecutorActivate" value="true" />
 		<property name="identityService" ref="altIdentityService"/>
+		<property name="idGenerator">
+			<bean class="org.activiti.engine.impl.persistence.StrongUuidGenerator" />
+		</property>
 		<!-- 
 		<property name="customFormTypes">
 			<list>
