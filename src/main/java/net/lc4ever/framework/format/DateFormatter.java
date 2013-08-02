@@ -36,7 +36,9 @@ public class DateFormatter {
 			formatter = new SimpleDateFormat(pattern);
 			FORMAT_REGISTER.put(pattern, formatter);
 		}
-		return formatter.format(date);
+		synchronized (formatter) {
+			return formatter.format(date);
+		}
 	}
 	public static Date parse(final String pattern, final String value) throws ParseException {
 		DateFormat formatter = FORMAT_REGISTER.get(pattern);
@@ -44,7 +46,9 @@ public class DateFormatter {
 			formatter = new SimpleDateFormat(pattern);
 			FORMAT_REGISTER.put(pattern, formatter);
 		}
-		return formatter.parse(value);
+		synchronized (formatter) {
+			return formatter.parse(value);
+		}
 	}
 
 	public static String format(final String format) {
