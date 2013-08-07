@@ -43,6 +43,9 @@
 		<property name="packagesToScan">
 			<ref bean="hibernateMappingPackages"/>
 		</property>
+		<property name="entityInterceptor">
+			<bean class="net.lc4ever.framework.dao.hibernate.AuditableObjectInterceptor"/>
+		</property>
 		<!-- <property name="eventListeners"> -->
 		<!-- <map> -->
 		<!-- <entry key="load"> -->
