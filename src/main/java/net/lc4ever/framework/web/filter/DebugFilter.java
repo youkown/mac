@@ -51,7 +51,7 @@ public class DebugFilter implements Filter {
 			HttpServletRequest req = (HttpServletRequest)request;
 			HttpServletResponse res = (HttpServletResponse) response;
 			String url = req.getRequestURL().toString();
-			logger.debug("Request :{}\t{}\t{}",req.getMethod(),req.getDispatcherType(),url);
+			logger.debug("Request :{}\t{}\t{}\t'{}'",req.getMethod(),req.getDispatcherType(),url,req.getQueryString());
 			chain.doFilter(request, response);
 			logger.debug("Response:{}\t{}",url, res.getStatus());
 		} else {
