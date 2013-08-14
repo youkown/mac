@@ -26,7 +26,7 @@ public abstract class AuditableUUIDObject extends AuditableObject<String> {
 	@Id
 	@Column(name = "ID", length = 36)
 	@GeneratedValue(generator = "uuidGenerator")
-	@GenericGenerator(name = "uuidGenerator", strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator")
+	@GenericGenerator(name = "uuidGenerator", strategy = "org.hibernate.id.UUIDGenerator")
 	public String getId() {
 		return id;
 	}
