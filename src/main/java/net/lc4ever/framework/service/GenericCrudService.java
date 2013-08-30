@@ -47,7 +47,7 @@ public interface GenericCrudService {
 	 * @param id 数据库条目主键值
 	 * @return 数据库条目
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <E extends BaseEntity<ID>, ID extends Serializable> E get(final Class<E> clazz, final ID id);
 
 	/**
@@ -110,7 +110,7 @@ public interface GenericCrudService {
 	 * @param clazz EntityBean 类型
 	 * @return 条目数量.
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <E extends BaseEntity<ID>, ID extends Serializable> long count(final Class<E> clazz);
 
 	/**
@@ -136,7 +136,7 @@ public interface GenericCrudService {
 	 * @param args HQL查询参数
 	 * @return 查询结果集
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public List<?> hql(final String hql, final Object... args);
 
 	/**
@@ -151,7 +151,7 @@ public interface GenericCrudService {
 	 * @param args HQL查询参数
 	 * @return 查询结果集
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public List<?> hql(final long firstResult, final long maxResults, final String hql, final Object... args);
 
 	/**
@@ -161,7 +161,7 @@ public interface GenericCrudService {
 	 * @param expectType 期望返回结果集类型
 	 * @see #hql(String, Object...)
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> List<T> hql(final Class<T> expectType, final String hql, final Object... args);
 
 	/**
@@ -174,7 +174,7 @@ public interface GenericCrudService {
 	 * @param args 参数列表
 	 * @return 结果集
 	 */
-	@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
 	public <T> List<T> hql(final Class<T> expectType, final long firstResult, final long maxResults, final String hql, final Object... args);
 
 	/**
@@ -187,14 +187,14 @@ public interface GenericCrudService {
 	 * @param args SQL查询参数
 	 * @return 查询结果集
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public List<?> sql(final String sql, final Object... args);
 
 	/**
 	 * @param resultTransformer {@link ResultTransformer}
 	 * @see #sql(String, Object...)
 	 */
-	@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
 	public List<?> sql(final ResultTransformer resultTransformer, final String sql, final Object... args);
 
 	/**
@@ -205,14 +205,14 @@ public interface GenericCrudService {
 	 * @param args 参数列表
 	 * @return 查询结果集
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public List<?> sql(final long firstResult, final long maxResults, final String sql, final Object... args);
 
 	/**
 	 * @param resultTransformer {@link ResultTransformer}
 	 * @see #sql(long, long, String, Object...)
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public List<?> sql(final ResultTransformer resultTransformer, final long firstResult, final long maxResults, final String sql, final Object... args);
 
 	/**
@@ -222,14 +222,14 @@ public interface GenericCrudService {
 	 * @param expectType 期望返回结果集类型
 	 * @see #sql(String, Object...)
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> List<T> sql(final Class<T> expectType, final String sql, final Object... args);
 
 	/**
 	 * @param resultTransformer {@link ResultTransformer}
 	 * @see #sql(Class, String, Object...)
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> List<T> sql(final Class<T> expectType, final ResultTransformer resultTransformer, final String sql, final Object... args);
 
 	/**
@@ -243,14 +243,14 @@ public interface GenericCrudService {
 	 * @param args 参数列表
 	 * @return 结果集
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> List<T> sql(final Class<T> expectType, final long firstResult, final long maxResults, final String sql, final Object... args);
 
 	/**
 	 * @param resultTransformer {@link ResultTransformer}
 	 * @see #sql(Class, long, long, String, Object...)
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> List<T> sql(final Class<T> expectType, final ResultTransformer resultTransformer, final long firstResult, final long maxResults, final String sql, final Object... args);
 
 	/**
@@ -262,7 +262,7 @@ public interface GenericCrudService {
 	 *             返回结果数量不是1(expect 1)
 	 * @throws org.springframework.dao.EmptyResultDataAccessException 返回结果为0记录
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public Object uniqueResultHql(final String hql, final Object... args);
 
 	/**
@@ -274,7 +274,7 @@ public interface GenericCrudService {
 	 *             返回结果数量不是1(expect 1)
 	 * @throws org.springframework.dao.EmptyResultDataAccessException 返回结果为0记录
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> T uniqueResultHql(final Class<T> expectType, final String hql, final Object... args);
 
 	/**
@@ -286,14 +286,14 @@ public interface GenericCrudService {
 	 *             返回结果数量不是1(expect 1)
 	 * @throws org.springframework.dao.EmptyResultDataAccessException 返回结果为0记录
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public Object uniqueResultSql(final String sql, final Object... args);
 
 	/**
 	 * @param resultTransformer {@link ResultTransformer}
 	 * @see #uniqueResultSql(String, Object...)
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public Object uniqueResultSql(ResultTransformer resultTransformer, String sql, Object... args);
 
 	/**
@@ -305,14 +305,14 @@ public interface GenericCrudService {
 	 *             返回结果数量不是1(expect 1)
 	 * @throws org.springframework.dao.EmptyResultDataAccessException 返回结果为0记录
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> T uniqueResultSql(final Class<T> expectType, final String sql, final Object... args);
 
 	/**
 	 * @param resultTransformer {@link ResultTransformer}
 	 * @see #uniqueResultSql(Class, String, Object...)
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> T uniqueResultSql(Class<T> expectType, ResultTransformer resultTransformer, String sql, Object... args);
 
 	/**
@@ -322,7 +322,7 @@ public interface GenericCrudService {
 	 * @param criteria
 	 * @return
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public List<?> criteria(final DetachedCriteria criteria);
 
 	/**
@@ -347,7 +347,7 @@ public interface GenericCrudService {
 	 * @return Entity, or null if no result, throws
 	 *         {@link NonUniqueResultException}
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <E extends BaseEntity<ID>, ID extends Serializable> E uniqueResultByProperties(final Class<E> clazz, final String[] properties, final Object[] args);
 
 	/**
@@ -362,7 +362,7 @@ public interface GenericCrudService {
 	 * @return Entity, or null if no result, throws
 	 *         {@link NonUniqueResultException}
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <E extends BaseEntity<ID>, ID extends Serializable> E uniqueResultByProperty(final Class<E> clazz, final String property, final Object arg);
 
 	/**
@@ -376,7 +376,7 @@ public interface GenericCrudService {
 	 * @param args 参数列表
 	 * @return List&lt;Entity&gt;, NOTE: empty list if no result.
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <E extends BaseEntity<ID>, ID extends Serializable> List<E> queryByProperties(final Class<E> clazz, final String[] properties, final Object[] args, final Order... orders);
 
 	/**
@@ -392,7 +392,7 @@ public interface GenericCrudService {
 	 * @param args 参数列表
 	 * @return List&lt;Entity&gt;, NOTE: empty list if no result.
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <E extends BaseEntity<ID>, ID extends Serializable> List<E> queryByProperties(final Class<E> clazz, final long firstResult, final long maxResults, final String[] properties, final Object[] args, final Order... orders);
 
 	/**
@@ -407,7 +407,7 @@ public interface GenericCrudService {
 	 * @param orders 排序
 	 * @return List&lt;Entity&gt;, NOTE: empty list if no result.
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <E extends BaseEntity<ID>, ID extends Serializable> List<E> queryByProperty(final Class<E> clazz, final String property, final Object arg, final Order... orders);
 
 	/**
@@ -424,7 +424,7 @@ public interface GenericCrudService {
 	 * @param orders 排序
 	 * @return
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <E extends BaseEntity<ID>, ID extends Serializable> List<E> queryByProperty(final Class<E> clazz, final long firstResult, final long maxResults, final String property, final Object arg, final Order... orders);
 
 	/**
@@ -435,7 +435,7 @@ public interface GenericCrudService {
 	 * @param args 参数列表
 	 * @return Entity if result not emtpy, or null.
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> T topResultHql(final Class<T> clazz, final String hql, final Object... args);
 
 	/**
@@ -445,7 +445,7 @@ public interface GenericCrudService {
 	 * @param args 参数列表
 	 * @return Entity if result not emtpy, or null.
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public Object topResultHql(final String hql, final Object... args);
 
 	/**
@@ -455,14 +455,14 @@ public interface GenericCrudService {
 	 * @param args 参数列表
 	 * @return Entity if result not emtpy, or null.
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public Object topResultSql(final String sql, final Object... args);
 
 	/**
 	 * @param resultTransformer {@link ResultTransformer}
 	 * @see #topResultSql(String, Object...)
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public Object topResultSql(ResultTransformer resultTransformer, String sql, Object... args);
 
 	/**
@@ -473,14 +473,14 @@ public interface GenericCrudService {
 	 * @param args 参数列表
 	 * @return Entity if result not emtpy, or null.
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> T topResultSql(final Class<T> clazz, final String sql, final Object... args);
 
 	/**
 	 * @param resultTransformer {@link ResultTransformer}
 	 * @see #topResultSql(Class, String, Object...)
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> T topResultSql(Class<T> clazz, ResultTransformer resultTransformer, String sql, Object... args);
 
 	/**
@@ -492,7 +492,7 @@ public interface GenericCrudService {
 	 * @param args 参数列表
 	 * @return List&lt;Entity&gt;, NOTE: empty list if no result.
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> List<T> topResultHql(final Class<T> clazz, final int top, final String hql, final Object... args);
 
 	/**
@@ -504,14 +504,14 @@ public interface GenericCrudService {
 	 * @param args 参数列表
 	 * @return List&lt;Entity&gt;, NOTE: empty list if no result.
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> List<T> topResultSql(final Class<T> clazz, final int top, final String sql, final Object... args);
 
 	/**
 	 * @param resultTransformer {@link ResultTransformer}
 	 * @see #topResultHql(Class, int, String, Object...)
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> List<T> topResultSql(Class<T> clazz, ResultTransformer resultTransformer, int top, String sql, Object... args);
 
 	/**
@@ -524,7 +524,7 @@ public interface GenericCrudService {
 	 * @param args 参数列表
 	 * @return Itegrator of results.
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public <T> Iterator<T> iterate(final Class<T> clazz, final String hql, final Object... args);
 
 	/**
@@ -533,7 +533,7 @@ public interface GenericCrudService {
 	 * @see #iterate(Class, String, Object...)
 	 * @param iterator 要关闭的iterator
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED,readOnly=true)
 	public void closeIterator(final Iterator<?> iterator);
 
 	/**
