@@ -1,0 +1,67 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'war'
+apply plugin: 'jetty'
+
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+project.ext {
+	version = '1.0'
+}
+
+
+eclipse {
+	classpath {
+		defaultOutputDir = file("build")
+	}
+}
+
+sourceSets {
+		main {
+			java {
+				srcDir 'src/main/java'
+				exclude '**/.svn/**'
+			}
+			resources {
+				srcDir 'src/main/resources'
+				exclude '**/.svn/**'
+			}
+		}
+}
+
+[compileJava, compileTestJava]*.options.collect { options -> 
+	options.encoding = 'UTF-8'
+}
+
+repositories {
+	maven {
+		url "http://localhost:8081/nexus/content/groups/public/"
+	}
+	maven {
+		url "http://localhost:8081/nexus/content/repositories/activiti/"
+	}
+	mavenCentral name:'codehaus', artifactUrls: ["http://repository.codehaus.org/"]
+	mavenCentral name:'ibiblio', artifactUrls: ["http://mirrors.ibiblio.org/pub/mirrors/maven2/"]
+	mavenCentral name:'apache', artifactUrls: ["http://people.apache.org/repo/m2-ibiblio-rsync-repository/"]
+	mavenCentral name:'maven', artifactUrls: ["http://repo2.maven.org/maven2/"]
+}
+
+
+dependencies {
+	compile "commons-pool:commons-pool:$commonsPoolVersion"
+	compile "commons-codec:commons-codec:$commonsCodecVersion"
+	providedCompile "javax.servlet:javax.servlet-api:$servletApiVersion"
+	compile "org.springframework:spring-orm:$springVersion"
+	compile "org.springframework:spring-context:$springVersion"
+	//compile "org.springframework:spring-context-support:$springVersion"
+	compile "org.springframework:spring-web:$springVersion"
+	compile "org.springframework.security:spring-security-core:$springSecurityVersion"
+	compile "org.springframework.security:spring-security-crypto:$springSecurityVersion"
+	compile "org.hibernate:hibernate-core:$hibernateVersion"
+	compile "org.slf4j:slf4j-api:$slf4jVersion"
+	runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
+	compile "org.activiti:activiti-engine:$activitiVersion"
+	compile "org.activiti:activiti-spring:$activitiVersion"
+}
