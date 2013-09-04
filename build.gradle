@@ -2,7 +2,7 @@
 
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
+apply plugin: 'eclipse-wtp'
 apply plugin: 'war'
 apply plugin: 'jetty'
 
@@ -18,6 +18,7 @@ project.ext {
 eclipse {
 	classpath {
 		defaultOutputDir = file("build")
+		/*
 		file {
 			withXml {
 				classpath ->
@@ -31,12 +32,33 @@ eclipse {
 					}
 			}
 		}
+		*/
 	}
-	project {
-		natures = ['org.eclipse.wst.common.project.facet.core.nature', 'org.eclipse.wst.common.modulecore.ModuleCoreNature', 'org.eclipse.jdt.core.javanature']
-		buildCommand 'org.eclipse.wst.common.project.facet.core.builder'
-		buildCommand 'org.eclipse.jdt.core.javabuilder'
-		buildCommand 'org.eclipse.wst.validation.validationbuilder'
+	wtp {
+		component {
+			file {
+				withXml {
+					def node = it.asNode()
+					for (wb in node.children()) {
+						def iterator = wb.iterator();
+						while (iterator.hasNext()) {
+							def n = iterator.next()
+							if (n.name() == 'property' || n.name() == 'dependent-module') {
+								iterator.remove()
+							} else if (n.name() == 'wb-resource') {
+								n.attributes()['deploy-path'] = '/'
+							}
+						}
+					}
+				}
+			}
+		}
+		facet {
+			facet type: 'fixed', name: 'java', version: '1.6'
+			facet type: 'fixed', name: 'jst.utility', version: '1.0'
+			facet name: 'java', version: '1.6'
+			facet name: 'jst.utility', version: '1.0'
+		}
 	}
 }
 
