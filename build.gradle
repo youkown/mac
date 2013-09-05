@@ -103,6 +103,12 @@ dependencies {
 	compile "org.springframework.security:spring-security-core:$springSecurityVersion"
 	compile "org.springframework.security:spring-security-crypto:$springSecurityVersion"
 	compile "org.hibernate:hibernate-core:$hibernateVersion"
+	//FIXME, add oracle jdbc
+	//liwenzhi@2013/09/05
+	compile files('lib/jar/jdbc/ojdbc6.jar')
+	//FIXME, add log4j, otherwise report ClassNotFoundException ...org.slf4j.Logger
+	//liwenzhi@2013/09/05
+	compile files('lib/jar/log4j/log4j-1.2.15.jar')
 	compile "org.slf4j:slf4j-api:$slf4jVersion"
 	runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
 	compile "org.activiti:activiti-engine:$activitiVersion"
