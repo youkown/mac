@@ -34,10 +34,6 @@ eclipse {
 		}
 		*/
 	}
-	project {
-		natures 'org.springframework.ide.eclipse.core.springnature'
-		buildCommand 'org.springframework.ide.eclipse.core.springbuilder'
-	}
 	wtp {
 		component {
 			file {
