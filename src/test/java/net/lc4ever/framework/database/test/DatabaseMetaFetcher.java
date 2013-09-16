@@ -13,6 +13,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import net.lc4ever.framework.database.meta.DatabaseMetadata;
+import oracle.jdbc.driver.OracleDriver;
 //import oracle.jdbc.driver.OracleDriver;
 
 
@@ -24,12 +25,13 @@ public class DatabaseMetaFetcher {
 	private Connection connection;
 
 	public static void main(String[] args) throws Exception {
-		//System.out.println(OracleDriver.BUILD_DATE);
+		System.out.println(OracleDriver.BUILD_DATE);
+		System.out.println(com.mysql.jdbc.Driver.class);
 
 		DatabaseMetaFetcher fetcher = new DatabaseMetaFetcher();
 
 		Connection connection = null;
-		
+
 		try {
 			connection = fetcher.getConnection();
 			DatabaseMetadata metadata = new DatabaseMetadata(connection);
@@ -284,13 +286,13 @@ public class DatabaseMetaFetcher {
 		//		metaData.getUDTs(catalog, schemaPattern, typeNamePattern, types);
 		//		metaData.getVersionColumns(catalog, schema, table);
 
-//		metaData.getColumns(null, null, null, null);
+		//		metaData.getColumns(null, null, null, null);
 
 	}
 
 	public Connection getConnection() throws SQLException {
-//		this.connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:DEV", "LC_ARCH", "LC_ARCH");
-		this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/snms?useUnicode=true&characterEncoding=UTF-8","snms","snms");
+		this.connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:DEV", "LC_ARCH", "LC_ARCH");
+		//		this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/snms?useUnicode=true&characterEncoding=UTF-8","snms","snms");
 		return connection;
 	}
 }

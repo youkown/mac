@@ -8,12 +8,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import net.lc4ever.framework.domain.BaseEntity;
+
+import org.hibernate.annotations.GenericGenerator;
 
 
 /**
@@ -21,18 +22,19 @@ import net.lc4ever.framework.domain.BaseEntity;
  */
 @Entity
 @Table(name="T5_META_COLUMN")
-public class ColumnMeta implements BaseEntity<Long> {
+public class ColumnMeta implements BaseEntity<String> {
 
-	private Long id;
+	private String id;
 
 	/**
 	 * @see net.lc4ever.framework.domain.BaseEntity#getId()
 	 */
 	@Override
 	@Id
-	@Column(name="ID")
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Long getId() {
+	@Column(name = "ID", length = 36)
+	@GeneratedValue(generator = "uuidGenerator")
+	@GenericGenerator(name = "uuidGenerator", strategy = "org.hibernate.id.UUIDGenerator")
+	public String getId() {
 		return id;
 	}
 
@@ -40,7 +42,7 @@ public class ColumnMeta implements BaseEntity<Long> {
 	 * @see net.lc4ever.framework.domain.BaseEntity#setId(java.io.Serializable)
 	 */
 	@Override
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

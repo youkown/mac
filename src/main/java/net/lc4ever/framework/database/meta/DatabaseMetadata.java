@@ -34,23 +34,34 @@ public class DatabaseMetadata {
 	private int transactionIsolation;
 	private Map<String, Class<?>> typeMap;
 
+	private int jdbcMajorVersion;
+	private int jdbcMinorVersion;
+
 	public DatabaseMetadata(Connection connection) throws SQLException {
 		extra(connection);
 	}
 
 	private void extra(Connection connection) throws SQLException {
-		connection.getCatalog();
 
+		DatabaseMetaData metaData = connection.getMetaData();
+
+		jdbcMajorVersion = metaData.getJDBCMajorVersion();
+		jdbcMinorVersion = metaData.getJDBCMinorVersion();
+
+		catalog = connection.getCatalog();
 		autoCommit = connection.getAutoCommit();
 		catalog = connection.getCatalog();
-		clientInfo = connection.getClientInfo(); // since 1.6
+
+		if (jdbcMajorVersion>5) {
+			clientInfo = connection.getClientInfo(); // since 1.6
+		}
 		holdability = connection.getHoldability(); // since 1.4
 		//		networkTimeout = connection.getNetworkTimeout(); // since 1.7
 		//		schema = connection.getSchema(); // since 1.7
 		transactionIsolation = connection.getTransactionIsolation();
 		typeMap = connection.getTypeMap(); // since 1.2
 
-		extraDatabaseMetadata(connection.getMetaData());
+		extraDatabaseMetadata(metaData);
 	}
 
 	private List<String> catalogs = new ArrayList<String>();
@@ -116,9 +127,6 @@ public class DatabaseMetadata {
 
 	private String extraNameCharacters;
 	private String identifierQuoteString;
-
-	private int jdbcMajorVersion;
-	private int jdbcMinorVersion;
 
 	public class Maximum implements Serializable {
 		private int maxBinaryLiteralLength;
@@ -458,7 +466,7 @@ public class DatabaseMetadata {
 				} catch (SQLException sqle) {}
 			}
 		}
-		
+
 	}
 	private List<String> tableTypes = new ArrayList<String>();
 	private List<Schema> schemas = new ArrayList<Schema>();
