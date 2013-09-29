@@ -18,7 +18,8 @@ import org.springframework.util.Assert;
  *
  * @author Q-Wang
  */
-public enum PasswordEncodingAlgorithm implements PasswordEncoder {
+@SuppressWarnings("deprecation")
+public enum PasswordEncodingAlgorithm implements PasswordEncoder, org.springframework.security.crypto.password.PasswordEncoder {
 	PLANTEXT(null,false,null),
 	SSHA("SHA",true,"{SSHA}"),
 	SHA("SHA",false,"{SHA}"),
@@ -90,7 +91,11 @@ public enum PasswordEncodingAlgorithm implements PasswordEncoder {
 		return null;
 	}
 
+	/**
+	 * @see org.springframework.security.authentication.encoding.PasswordEncoder#encodePassword(java.lang.String, java.lang.Object)
+	 */
 	@Override
+	@Deprecated
 	public String encodePassword(final String rawPass, final Object salt) throws DataAccessException {
 		if (algorithm==null) {
 			return rawPass;
@@ -112,7 +117,11 @@ public enum PasswordEncodingAlgorithm implements PasswordEncoder {
 		}
 	}
 
+	/**
+	 * @see org.springframework.security.authentication.encoding.PasswordEncoder#isPasswordValid(java.lang.String, java.lang.String, java.lang.Object)
+	 */
 	@Override
+	@Deprecated
 	public boolean isPasswordValid(final String encPass, final String rawPass, Object salt) throws DataAccessException {
 		if (needSalt) {
 			salt = extractSalt(encPass);
@@ -139,5 +148,17 @@ public enum PasswordEncodingAlgorithm implements PasswordEncoder {
 			throw new IllegalArgumentException("Couldn't find closing brace for SHA prefix");
 		}
 		return encPass.substring(0, secondBrace + 1);
+	}
+
+	@Override
+	public String encode(CharSequence rawPassword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean matches(CharSequence rawPassword, String encodedPassword) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

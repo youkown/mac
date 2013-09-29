@@ -10,11 +10,10 @@ import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.util.Assert;
 
 /**
- *
- *
  * @author Q-Wang
  */
-public class LdapPasswordEncoder implements PasswordEncoder, InitializingBean {
+@SuppressWarnings("deprecation")
+public class LdapPasswordEncoder implements PasswordEncoder,org.springframework.security.crypto.password.PasswordEncoder, InitializingBean {
 
 	private PasswordEncodingAlgorithm encoding = PasswordEncodingAlgorithm.PLANTEXT;
 
@@ -33,18 +32,39 @@ public class LdapPasswordEncoder implements PasswordEncoder, InitializingBean {
 
 	/**
 	 * @see org.springframework.security.providers.encoding.PasswordEncoder#encodePassword(java.lang.String, java.lang.Object)
+	 * @deprecated use {@link #encode(CharSequence)} instead
 	 */
 	@Override
+	@Deprecated
 	public String encodePassword(final String rawPass, final Object salt) throws DataAccessException {
 		return encoding.encodePassword(rawPass, salt);
 	}
 
 	/**
 	 * @see org.springframework.security.providers.encoding.PasswordEncoder#isPasswordValid(java.lang.String, java.lang.String, java.lang.Object)
+	 * @deprecated use {@link #matches(CharSequence, String)} instead
 	 */
+	@Deprecated
 	@Override
 	public boolean isPasswordValid(final String encPass, final String rawPass, final Object salt) throws DataAccessException {
 		PasswordEncodingAlgorithm algorithm = PasswordEncodingAlgorithm.algorithmOf(encPass);
 		return algorithm.isPasswordValid(encPass, rawPass, salt);
+	}
+
+	/**
+	 * @see org.springframework.security.crypto.password.PasswordEncoder#encode(java.lang.CharSequence)
+	 */
+	@Override
+	public String encode(CharSequence rawPassword) {
+		return encoding.encode(rawPassword);
+	}
+
+	/**
+	 * @see org.springframework.security.crypto.password.PasswordEncoder#matches(java.lang.CharSequence, java.lang.String)
+	 */
+	@Override
+	public boolean matches(CharSequence rawPassword, String encodedPassword) {
+		PasswordEncodingAlgorithm algorithm = PasswordEncodingAlgorithm.algorithmOf(encodedPassword);
+		return algorithm.matches(rawPassword, encodedPassword);
 	}
 }

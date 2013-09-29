@@ -19,6 +19,7 @@ import net.lc4ever.framework.domain.BaseEntity;
  */
 @Entity
 @Table(name="T5_META_DATABASE")
+@SuppressWarnings("unused")
 public class DatabaseMeta implements BaseEntity<Long> {
 
 	private Long id;

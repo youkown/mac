@@ -101,6 +101,7 @@ public class DatabaseMetaFetcher {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public void getResultSetMeta(ResultSet resultSet) throws SQLException {
 		ResultSetMetaData metaData = resultSet.getMetaData();
 		int count = metaData.getColumnCount();

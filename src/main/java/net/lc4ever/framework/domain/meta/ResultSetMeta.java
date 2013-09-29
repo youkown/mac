@@ -21,6 +21,7 @@ import net.lc4ever.framework.domain.BaseEntity;
  */
 @Entity
 @Table(name="T5_META_RESULT_SET")
+@SuppressWarnings("unused")
 public class ResultSetMeta implements BaseEntity<Long> {
 
 	private Long id;

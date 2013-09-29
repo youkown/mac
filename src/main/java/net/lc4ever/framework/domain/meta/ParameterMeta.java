@@ -20,6 +20,7 @@ import net.lc4ever.framework.domain.BaseEntity;
  */
 @Entity
 @Table(name="T5_META_PARAMETER")
+@SuppressWarnings("unused")
 public class ParameterMeta implements BaseEntity<Long> {
 
 	private Long id;

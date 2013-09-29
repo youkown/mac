@@ -15,6 +15,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="T2_VIEW_HTML_TABLE")
+@SuppressWarnings("unused")
 public class HtmlTable extends HtmlObject {
 
 	private String caption;
