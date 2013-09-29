@@ -1,3 +1,5 @@
+import groovy.util.Node
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'jetty'
@@ -11,19 +13,15 @@ project.ext {
 	version = '1.0'
 }
 
-task ttt(type:Task) {
-	println property("aaa.bbb")
-}
-
 eclipse {
 	classpath {
 		defaultOutputDir = file("build/eclipse/classes")
 		file {
 			withXml {
-				def node = it.asNode()
+				def Node node = it.asNode()
 				for (entry in node['classpathentry'].iterator()) {
 					if (entry.'@kind' == 'lib') {
-						def path = entry.'@path'
+						def String path = entry.'@path'
 						if (configurations.providedCompile.find {it.path == path}) {
 //							logger.info 'ProvidedCompile Lib Found:' + file(entry.'@path').name
 //							entry.children().clear()
