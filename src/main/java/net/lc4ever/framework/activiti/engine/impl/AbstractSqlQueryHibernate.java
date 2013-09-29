@@ -45,6 +45,7 @@ public abstract class AbstractSqlQueryHibernate<T extends Query<?,?>, U> impleme
 	protected T addOrder(final String orderColumn) {
 		if (orderField!=null) throw new IllegalStateException("Previous Order Field not define asc or desc:" + orderField);
 		orderField = orderColumn;
+		if (orders.length()!=0) orders.append(",");
 		return (T) this;
 	}
 
