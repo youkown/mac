@@ -17,11 +17,11 @@ privileged aspect Domain_Roo_Equals {
             return true;
         }
         Domain rhs = (Domain) obj;
-        return new EqualsBuilder().append(code, rhs.code).append(createTimestamp, rhs.createTimestamp).append(defaultValue, rhs.defaultValue).append(deletionTag, rhs.deletionTag).append(descripton, rhs.descripton).append(id, rhs.id).append(javaType, rhs.javaType).append(modifyTimestamp, rhs.modifyTimestamp).append(namespace, rhs.namespace).append(nullable, rhs.nullable).append(scale, rhs.scale).append(size, rhs.size).append(sqlType, rhs.sqlType).isEquals();
+        return new EqualsBuilder().append(createTimestamp, rhs.createTimestamp).append(deletionTag, rhs.deletionTag).append(id, rhs.id).append(modifyTimestamp, rhs.modifyTimestamp).isEquals();
     }
     
     public int Domain.hashCode() {
-        return new HashCodeBuilder().append(code).append(createTimestamp).append(defaultValue).append(deletionTag).append(descripton).append(id).append(javaType).append(modifyTimestamp).append(namespace).append(nullable).append(scale).append(size).append(sqlType).toHashCode();
+        return new HashCodeBuilder().append(createTimestamp).append(deletionTag).append(id).append(modifyTimestamp).toHashCode();
     }
     
 }
