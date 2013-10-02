@@ -10,3 +10,4 @@ hint
 project --topLevelPackage net.lc4ever.framework
 jpa setup --database MYSQL --jndiDataSource jdbc/roo --provider HIBERNATE
 focus --class net.lc4ever.framework.domain.cdm.Domain
+equals 
